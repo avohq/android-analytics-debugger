@@ -3,6 +3,7 @@ package app.avo.androidanalyticsdebugger;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.util.DisplayMetrics;
@@ -24,7 +25,7 @@ public class Debugger {
         final DisplayMetrics displayMetrics = new DisplayMetrics();
         windowManager.getDefaultDisplay().getMetrics(displayMetrics);
 
-        final WindowManager.LayoutParams layoutParams = prepareWindowManagerLayoutParams(displayMetrics);
+        final WindowManager.LayoutParams layoutParams = prepareWindowManagerLayoutParams(rootActivity, displayMetrics);
 
         final View debuggerView = createDebuggerView(rootActivity, mode, layoutParams);
 
@@ -38,41 +39,41 @@ public class Debugger {
     private View createDebuggerView(Activity rootActivity, DebuggerMode mode, WindowManager.LayoutParams layoutParams) {
         final View debuggerView;
         if (mode == DebuggerMode.bar) {
-            int debuggerViewDimension = (int) convertDpToPixel(48, rootActivity);
-            debuggerView = createBarView(rootActivity, layoutParams, debuggerViewDimension);
+            debuggerView = createBarView(rootActivity, layoutParams);
         } else {
-            debuggerView = createBubbleView(rootActivity);
+            debuggerView = createBubbleView(rootActivity, layoutParams);
         }
         return debuggerView;
     }
 
-    private WindowManager.LayoutParams prepareWindowManagerLayoutParams(DisplayMetrics displayMetrics) {
+    private WindowManager.LayoutParams prepareWindowManagerLayoutParams(Context context, DisplayMetrics displayMetrics) {
+        int barHeight = 0;
+        Resources resources = context.getResources();
+        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            barHeight = resources.getDimensionPixelSize(resourceId);
+        }
+
         final WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
         layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION;
         layoutParams.format = PixelFormat.TRANSLUCENT;
         layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
-        layoutParams.y = (displayMetrics.heightPixels) / 2;
+        layoutParams.y = (displayMetrics.heightPixels - barHeight) / 2;
         layoutParams.x = (displayMetrics.widthPixels) / 2;
+
         return layoutParams;
     }
 
-    private View createBubbleView(Activity rootActivity) {
+    private View createBubbleView(Activity rootActivity, WindowManager.LayoutParams layoutParams) {
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
         return rootActivity.getLayoutInflater().inflate(R.layout.bubble_view, null);
     }
 
-    private View createBarView(Activity rootActivity, WindowManager.LayoutParams layoutParams, int debuggerViewDimension) {
-        TextView debuggerView;
-        debuggerView = new TextView(rootActivity);
-        debuggerView.setText("Debugger");
-        debuggerView.setBackgroundColor(Color.BLACK);
-        debuggerView.setTextColor(Color.WHITE);
-
+    private View createBarView(Activity rootActivity, WindowManager.LayoutParams layoutParams) {
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-
-        debuggerView.setHeight(debuggerViewDimension);
-        return debuggerView;
+        return rootActivity.getLayoutInflater().inflate(R.layout.bar_view, null);
     }
 
     public void hideDebugger(Activity rootActivity) {
@@ -82,7 +83,7 @@ public class Debugger {
         }
     }
 
-    private float convertDpToPixel(float dp, Context context){
+/*    private float convertDpToPixel(float dp, Context context){
         return dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
-    }
+    }*/
 }

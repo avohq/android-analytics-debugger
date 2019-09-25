@@ -29,6 +29,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         Debugger debugger = new Debugger();
-        debugger.showDebugger(this, DebuggerMode.bubble);
+        debugger.showDebugger(this, DebuggerMode.bar);
     }
 }

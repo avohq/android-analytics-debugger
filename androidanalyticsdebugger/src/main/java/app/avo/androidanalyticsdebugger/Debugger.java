@@ -4,111 +4,79 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PixelFormat;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 
+
 public class Debugger {
 
-    static WeakReference<TextView> debuggerViewRef;
+    private static WeakReference<View> debuggerViewRef;
 
     @SuppressLint("ClickableViewAccessibility")
     public void showDebugger(final Activity rootActivity, DebuggerMode mode) {
         final WindowManager windowManager = rootActivity.getWindowManager();
-
-        final WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-        layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION;
-
-        int debuggerViewDimention = (int) convertDpToPixel(48, rootActivity);
-
-        final TextView debuggerView;
-
-        if (mode == DebuggerMode.bar) {
-            debuggerView = new TextView(rootActivity);
-            debuggerView.setText("Debugger");
-            debuggerView.setBackgroundColor(Color.BLACK);
-            debuggerView.setTextColor(Color.WHITE);
-            debuggerView.setGravity(Gravity.CENTER);
-
-            layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-
-            debuggerView.setHeight(debuggerViewDimention);
-        } else {
-            debuggerView = new TextView(rootActivity);
-            debuggerView.setText("Debugger");
-            debuggerView.setBackgroundColor(Color.BLACK);
-            debuggerView.setTextColor(Color.WHITE);
-            debuggerView.setGravity(Gravity.CENTER);
-
-            layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-
-            debuggerView.setHeight(debuggerViewDimention);
-            debuggerView.setWidth(debuggerViewDimention);
-        }
-
-        debuggerViewRef = new WeakReference<>(debuggerView);
-
-        rootActivity.getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-
-        DisplayMetrics displayMetrics = new DisplayMetrics();
+        final DisplayMetrics displayMetrics = new DisplayMetrics();
         windowManager.getDefaultDisplay().getMetrics(displayMetrics);
 
-        layoutParams.y = (displayMetrics.heightPixels - debuggerViewDimention) / 2;
+        final WindowManager.LayoutParams layoutParams = prepareWindowManagerLayoutParams(displayMetrics);
+
+        final View debuggerView = createDebuggerView(rootActivity, mode, layoutParams);
 
         windowManager.addView(debuggerView, layoutParams);
 
-        debuggerView.setOnTouchListener(new View.OnTouchListener() {
-            private int initialY;
-            private float initialTouchY;
+        debuggerView.setOnTouchListener(new DebuggerTouchHandler(windowManager, layoutParams));
 
-            private int initialX;
-            private float initialTouchX;
+        debuggerViewRef = new WeakReference<>(debuggerView);
+    }
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        initialY = layoutParams.y;
-                        initialX = layoutParams.x;
+    private View createDebuggerView(Activity rootActivity, DebuggerMode mode, WindowManager.LayoutParams layoutParams) {
+        final View debuggerView;
+        if (mode == DebuggerMode.bar) {
+            int debuggerViewDimension = (int) convertDpToPixel(48, rootActivity);
+            debuggerView = createBarView(rootActivity, layoutParams, debuggerViewDimension);
+        } else {
+            debuggerView = createBubbleView(rootActivity);
+        }
+        return debuggerView;
+    }
 
-                        initialTouchX = event.getRawX();
-                        initialTouchY = event.getRawY();
-                        return true;
-                    case MotionEvent.ACTION_MOVE:
-                        layoutParams.y = initialY + (int) (event.getRawY() - initialTouchY);
-                        layoutParams.x = initialX + (int) (event.getRawX() - initialTouchX);
+    private WindowManager.LayoutParams prepareWindowManagerLayoutParams(DisplayMetrics displayMetrics) {
+        final WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION;
+        layoutParams.format = PixelFormat.TRANSLUCENT;
+        layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
+        layoutParams.y = (displayMetrics.heightPixels) / 2;
+        return layoutParams;
+    }
 
-                        windowManager.updateViewLayout(debuggerView, layoutParams);
-                        return true;
-                    case MotionEvent.ACTION_UP:
-                        float endX = event.getRawX();
-                        float endY = event.getRawY();
-                        if (isAClick(initialTouchX, endX, initialTouchY, endY)) {
-                            Toast.makeText(rootActivity, "Debugger clicked", Toast.LENGTH_SHORT).show();
-                        }
-                        return true;
-                }
-                return false;
-            }
+    private View createBubbleView(Activity rootActivity) {
+        return rootActivity.getLayoutInflater().inflate(R.layout.bubble_view, null);
+    }
 
-            private boolean isAClick(float startX, float endX, float startY, float endY) {
-                float differenceX = Math.abs(startX - endX);
-                float differenceY = Math.abs(startY - endY);
-                return !(differenceX > 5 || differenceY > 5);
-            }
-        });
+    private View createBarView(Activity rootActivity, WindowManager.LayoutParams layoutParams, int debuggerViewDimension) {
+        TextView debuggerView;
+        debuggerView = new TextView(rootActivity);
+        debuggerView.setText("Debugger");
+        debuggerView.setBackgroundColor(Color.BLACK);
+        debuggerView.setTextColor(Color.WHITE);
+        debuggerView.setGravity(Gravity.CENTER);
+
+        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+
+        debuggerView.setHeight(debuggerViewDimension);
+        return debuggerView;
     }
 
     public void hideDebugger(Activity rootActivity) {
-        TextView debuggerView = debuggerViewRef.get();
+        View debuggerView = debuggerViewRef.get();
         if (debuggerView != null) {
             rootActivity.getWindowManager().removeView(debuggerView);
         }

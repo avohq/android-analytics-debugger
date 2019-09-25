@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AndroidAnalyticsDebugger</string>
+    <string name="debugger_logo">Debugger logo</string>
 </resources>

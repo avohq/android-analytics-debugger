@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="transparentBlack">#50000000</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="background">#FFFFFF</color>
+    <color name="error">#D94553</color>
+    <color name="noerror">#3BBA9A</color>
+    <color name="foreground">#000000</color>
+    <color name="foregroundLight">#666666</color>
+    <color name="foregroundLighter">#DDDDDD</color>
+    <color name="foregroundLightish">#333333</color>
+    <color name="divider">#E3E3E3</color>
+
+
+</resources>

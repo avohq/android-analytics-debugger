@@ -54,6 +54,7 @@ public class Debugger {
         layoutParams.format = PixelFormat.TRANSLUCENT;
         layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
         layoutParams.y = (displayMetrics.heightPixels) / 2;
+        layoutParams.x = (displayMetrics.widthPixels) / 2;
         return layoutParams;
     }
 
@@ -67,7 +68,6 @@ public class Debugger {
         debuggerView.setText("Debugger");
         debuggerView.setBackgroundColor(Color.BLACK);
         debuggerView.setTextColor(Color.WHITE);
-        debuggerView.setGravity(Gravity.CENTER);
 
         layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
 

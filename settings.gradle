@@ -1,0 +1,2 @@
+include ':app', ':androidanalyticsdebugger'
+rootProject.name='AndroidAnalyticsDebuggerExample'

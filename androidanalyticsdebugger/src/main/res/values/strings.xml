@@ -2,4 +2,5 @@
     <string name="app_name">AndroidAnalyticsDebugger</string>
     <string name="debugger_logo">Debugger logo</string>
     <string name="no_events_yet_label">No events yet</string>
+    <string name="zero_num_label">0</string>
 </resources>

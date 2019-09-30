@@ -13,7 +13,7 @@ import java.util.Locale;
 
 import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 
-class BarView {
+class BarViewContainer implements DebuggerViewContainer {
 
     private View view;
 
@@ -23,7 +23,7 @@ class BarView {
     private ImageView successIcon;
     private ImageView dragHandle;
 
-    BarView(LayoutInflater layoutInflater) {
+    BarViewContainer(LayoutInflater layoutInflater) {
         view = layoutInflater.inflate(R.layout.bar_view, null);
 
         timestamp = view.findViewById(R.id.timestamp);
@@ -32,7 +32,17 @@ class BarView {
         dragHandle = view.findViewById(R.id.drag_handle);
     }
 
-    void setError(boolean hasError) {
+    @Override
+    public View.OnClickListener getOnClickListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setError(false);
+            }
+        };
+    }
+
+    private void setError(boolean hasError) {
         if (hasError) {
             successIcon.setImageResource(R.drawable.warning);
             dragHandle.setImageResource(R.drawable.drag_handle_white);
@@ -48,9 +58,13 @@ class BarView {
         }
     }
 
-    void showEvent(DebuggerEventItem event) {
+    public void showEvent(DebuggerEventItem event) {
         timestamp.setText(timeString(event.timestamp));
         eventName.setText(event.name);
+
+        if (Util.eventsHaveErrors(event)) {
+            setError(true);
+        }
     }
 
     private String timeString(@Nullable Long timestamp) {
@@ -61,7 +75,7 @@ class BarView {
         return new SimpleDateFormat("HH:mm:ss.ms", Locale.US).format(new Date(timestamp));
     }
 
-    View getView() {
+    public View getView() {
         return view;
     }
 }

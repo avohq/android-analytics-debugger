@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.PixelFormat;
 import android.util.DisplayMetrics;
-import android.view.View;
 import android.view.WindowManager;
 
 import java.lang.ref.WeakReference;
@@ -19,10 +18,7 @@ import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 public class Debugger {
 
     private static List<DebuggerEventItem> items = new ArrayList<>();
-    private static int unhandledNewItems = 0;
-    private static WeakReference<View> debuggerViewRef;
-
-    private WeakReference<BarView> barRef;
+    private static WeakReference<DebuggerViewContainer> debuggerViewContainerRef;
 
     @SuppressLint("ClickableViewAccessibility")
     public void showDebugger(final Activity rootActivity, DebuggerMode mode) {
@@ -30,48 +26,41 @@ public class Debugger {
         final DisplayMetrics displayMetrics = new DisplayMetrics();
         windowManager.getDefaultDisplay().getMetrics(displayMetrics);
 
-        final WindowManager.LayoutParams layoutParams = prepareWindowManagerLayoutParams(rootActivity, displayMetrics);
+        final WindowManager.LayoutParams layoutParams
+                = prepareWindowManagerLayoutParams(rootActivity, displayMetrics);
 
-        final View debuggerView = createDebuggerView(rootActivity, mode, layoutParams);
+        final DebuggerViewContainer debuggerViewContainer = createDebuggerView(rootActivity, mode,
+                layoutParams);
 
-        windowManager.addView(debuggerView, layoutParams);
+        windowManager.addView(debuggerViewContainer.getView(), layoutParams);
 
-        debuggerView.setOnTouchListener(new DebuggerTouchHandler(windowManager, layoutParams));
+        debuggerViewContainer.getView().setOnTouchListener(new DebuggerTouchHandler(windowManager,
+                layoutParams, debuggerViewContainer));
 
-        debuggerViewRef = new WeakReference<>(debuggerView);
+        debuggerViewContainerRef = new WeakReference<>(debuggerViewContainer);
     }
 
-    private View createDebuggerView(Activity rootActivity, DebuggerMode mode, WindowManager.LayoutParams layoutParams) {
-        final View debuggerView;
+    private DebuggerViewContainer createDebuggerView(Activity rootActivity, DebuggerMode mode,
+                                                     WindowManager.LayoutParams layoutParams) {
+        final DebuggerViewContainer debuggerViewContainer;
         if (mode == DebuggerMode.bar) {
-            debuggerView = createBarView(rootActivity, layoutParams);
+            debuggerViewContainer = createBarView(rootActivity, layoutParams);
         } else {
-            debuggerView = createBubbleView(rootActivity, layoutParams);
+            debuggerViewContainer = createBubbleView(rootActivity, layoutParams);
         }
-        return debuggerView;
-    }
-
-    private void setError(boolean hasError) {
-        BarView barView = barRef.get();
-
-        if (barView != null) {
-            barView.setError(hasError);
-        }
+        return debuggerViewContainer;
     }
 
     public void publishEvent(DebuggerEventItem event) {
-        BarView barView = barRef.get();
+        DebuggerViewContainer debuggerViewContainer = debuggerViewContainerRef.get();
 
-        if (barView != null) {
-            barView.showEvent(event);
-        }
-
-        if (Util.eventsHaveErrors(event)) {
-            setError(true);
+        if (debuggerViewContainer != null) {
+            debuggerViewContainer.showEvent(event);
         }
     }
 
-    private WindowManager.LayoutParams prepareWindowManagerLayoutParams(Context context, DisplayMetrics displayMetrics) {
+    private WindowManager.LayoutParams prepareWindowManagerLayoutParams(Context context,
+                                                                        DisplayMetrics displayMetrics) {
         int barHeight = 0;
         Resources resources = context.getResources();
         int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
@@ -89,26 +78,28 @@ public class Debugger {
         return layoutParams;
     }
 
-    private View createBubbleView(Activity rootActivity, WindowManager.LayoutParams layoutParams) {
+    private DebuggerViewContainer createBubbleView(Activity rootActivity, WindowManager.LayoutParams layoutParams) {
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        return rootActivity.getLayoutInflater().inflate(R.layout.bubble_view, null);
+
+        BubbleViewContainer bubbleView = new BubbleViewContainer(rootActivity.getLayoutInflater());
+
+        return bubbleView;
     }
 
-    private View createBarView(Activity rootActivity, WindowManager.LayoutParams layoutParams) {
+    private DebuggerViewContainer createBarView(Activity rootActivity, WindowManager.LayoutParams layoutParams) {
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
 
-        BarView barView = new BarView(rootActivity.getLayoutInflater());
-        barRef = new WeakReference<>(barView);
+        BarViewContainer barView = new BarViewContainer(rootActivity.getLayoutInflater());
 
-        return barView.getView();
+        return barView;
     }
 
     public void hideDebugger(Activity rootActivity) {
-        View debuggerView = debuggerViewRef.get();
-        if (debuggerView != null) {
-            rootActivity.getWindowManager().removeView(debuggerView);
+        DebuggerViewContainer debuggerViewContainer = debuggerViewContainerRef.get();
+        if (debuggerViewContainer != null) {
+            rootActivity.getWindowManager().removeView(debuggerViewContainer.getView());
         }
     }
 

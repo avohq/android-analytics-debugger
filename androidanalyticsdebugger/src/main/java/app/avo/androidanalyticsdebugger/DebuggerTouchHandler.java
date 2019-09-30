@@ -15,10 +15,13 @@ public class DebuggerTouchHandler implements View.OnTouchListener {
 
     private WindowManager.LayoutParams layoutParams;
     private WindowManager windowManager;
+    private View.OnClickListener onClickListener;
 
-    public DebuggerTouchHandler(WindowManager windowManager, WindowManager.LayoutParams layoutParams) {
+    public DebuggerTouchHandler(WindowManager windowManager, WindowManager.LayoutParams layoutParams,
+                                DebuggerViewContainer debuggerViewContainer) {
         this.layoutParams = layoutParams;
         this.windowManager = windowManager;
+        this.onClickListener = debuggerViewContainer.getOnClickListener();
     }
 
     @Override
@@ -41,7 +44,7 @@ public class DebuggerTouchHandler implements View.OnTouchListener {
                 float endX = event.getRawX();
                 float endY = event.getRawY();
                 if (isAClick(initialTouchX, endX, initialTouchY, endY)) {
-                    Toast.makeText(v.getContext(), "Debugger clicked", Toast.LENGTH_SHORT).show();
+                    onClickListener.onClick(v);
                 }
                 return true;
         }

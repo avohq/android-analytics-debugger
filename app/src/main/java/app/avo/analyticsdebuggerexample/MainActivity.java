@@ -26,6 +26,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        debugger = new Debugger();
+        debugger.showDebugger(this, DebuggerMode.bubble);
+
+        DebuggerEventItem event = new DebuggerEventItem("App open", "app open id",
+                System.currentTimeMillis(), "App open", new ArrayList<DebuggerMessage>(),
+                new ArrayList<DebuggerProp>(), new ArrayList<DebuggerProp>());
+        debugger.publishEvent(event);
+
         findViewById(R.id.hello_world).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,13 +69,5 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        debugger = new Debugger();
-        debugger.showDebugger(this, DebuggerMode.bar);
     }
 }

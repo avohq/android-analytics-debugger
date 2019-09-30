@@ -10,6 +10,7 @@
     android:background="@color/transparent">
 
     <ImageView
+        android:id="@+id/bubble"
         android:src="@drawable/avo_bubble"
         android:layout_width="48dp"
         android:layout_height="48dp"
@@ -22,11 +23,16 @@
         android:layout_height="16dp"
         android:layout_gravity="bottom|start"
         android:background="@drawable/green_oval"
-        tools:text="99"
-        android:textSize="9sp"
+        android:text="@string/zero_num_label"
         android:textColor="@color/background"
         android:gravity="center"
         app:autoSizeTextType="uniform"
-        tools:ignore="SmallSp" />
+        app:autoSizeMinTextSize="6sp"
+        android:textStyle="bold"
+        android:padding="1dp"
+        android:elevation="1dp"
+
+        tools:ignore="UnusedAttribute"
+        />
 
 </FrameLayout>

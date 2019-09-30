@@ -4,20 +4,25 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
+
+import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 
 
 public class Debugger {
 
+    private static List<DebuggerEventItem> items = new ArrayList<>();
+    private static int unhandledNewItems = 0;
     private static WeakReference<View> debuggerViewRef;
+
+    private WeakReference<BarView> barRef;
 
     @SuppressLint("ClickableViewAccessibility")
     public void showDebugger(final Activity rootActivity, DebuggerMode mode) {
@@ -44,6 +49,26 @@ public class Debugger {
             debuggerView = createBubbleView(rootActivity, layoutParams);
         }
         return debuggerView;
+    }
+
+    private void setError(boolean hasError) {
+        BarView barView = barRef.get();
+
+        if (barView != null) {
+            barView.setError(hasError);
+        }
+    }
+
+    public void publishEvent(DebuggerEventItem event) {
+        BarView barView = barRef.get();
+
+        if (barView != null) {
+            barView.showEvent(event);
+        }
+
+        if (Util.eventsHaveErrors(event)) {
+            setError(true);
+        }
     }
 
     private WindowManager.LayoutParams prepareWindowManagerLayoutParams(Context context, DisplayMetrics displayMetrics) {
@@ -73,7 +98,11 @@ public class Debugger {
     private View createBarView(Activity rootActivity, WindowManager.LayoutParams layoutParams) {
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-        return rootActivity.getLayoutInflater().inflate(R.layout.bar_view, null);
+
+        BarView barView = new BarView(rootActivity.getLayoutInflater());
+        barRef = new WeakReference<>(barView);
+
+        return barView.getView();
     }
 
     public void hideDebugger(Activity rootActivity) {

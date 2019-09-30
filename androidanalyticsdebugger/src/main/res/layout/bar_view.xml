@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
-    android:background="@color/background"
-    >
+    android:background="@color/background">
 
     <View
         android:layout_width="match_parent"
@@ -14,6 +14,52 @@
         />
 
     <ImageView
+        android:id="@+id/success_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/tick"
+        android:scaleType="centerInside"
+        />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/success_icon"
+        android:layout_toEndOf="@id/success_icon"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp">
+
+        <TextView
+            android:id="@+id/timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:textColor="@color/foregroundLight"
+            tools:text="10:16:60.674"
+            tools:ignore="SmallSp"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:id="@+id/event_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Comment Posted"
+            android:textSize="14sp"
+            android:textColor="@color/foreground"
+            android:text="@string/no_events_yet_label"
+            android:textStyle="bold"
+            />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/drag_handle"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:src="@drawable/drag_handle_grey"

@@ -14,10 +14,10 @@ import java.util.List;
 
 import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 
-
 public class Debugger {
 
-    private static List<DebuggerEventItem> items = new ArrayList<>();
+    public static List<DebuggerEventItem> events = new ArrayList<>();
+
     private static WeakReference<DebuggerViewContainer> debuggerViewContainerRef;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -56,6 +56,7 @@ public class Debugger {
 
         if (debuggerViewContainer != null) {
             debuggerViewContainer.showEvent(event);
+            events.add(0, event);
         }
     }
 
@@ -82,18 +83,14 @@ public class Debugger {
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
 
-        BubbleViewContainer bubbleView = new BubbleViewContainer(rootActivity.getLayoutInflater());
-
-        return bubbleView;
+        return new BubbleViewContainer(rootActivity.getLayoutInflater());
     }
 
     private DebuggerViewContainer createBarView(Activity rootActivity, WindowManager.LayoutParams layoutParams) {
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
 
-        BarViewContainer barView = new BarViewContainer(rootActivity.getLayoutInflater());
-
-        return barView;
+        return new BarViewContainer(rootActivity.getLayoutInflater());
     }
 
     public void hideDebugger(Activity rootActivity) {

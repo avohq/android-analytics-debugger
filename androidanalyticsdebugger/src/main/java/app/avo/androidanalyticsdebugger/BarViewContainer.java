@@ -5,12 +5,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 
 class BarViewContainer implements DebuggerViewContainer {
@@ -59,20 +53,12 @@ class BarViewContainer implements DebuggerViewContainer {
     }
 
     public void showEvent(DebuggerEventItem event) {
-        timestamp.setText(timeString(event.timestamp));
+        timestamp.setText(Util.timeString(event.timestamp));
         eventName.setText(event.name);
 
-        if (Util.eventsHaveErrors(event)) {
+        if (Util.eventHaveErrors(event)) {
             setError(true);
         }
-    }
-
-    private String timeString(@Nullable Long timestamp) {
-        if (timestamp == null) {
-            return "";
-        }
-
-        return new SimpleDateFormat("HH:mm:ss.ms", Locale.US).format(new Date(timestamp));
     }
 
     public View getView() {

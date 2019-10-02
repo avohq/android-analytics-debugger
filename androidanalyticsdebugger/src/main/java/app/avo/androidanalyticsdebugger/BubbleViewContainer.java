@@ -51,10 +51,10 @@ public class BubbleViewContainer implements DebuggerViewContainer {
 
     @Override
     public void showEvent(DebuggerEventItem event) {
-        countedEvents += 10;
+        countedEvents += 1;
         counter.setText(String.format(Locale.US, "%d", countedEvents));
 
-        if (Util.eventsHaveErrors(event)) {
+        if (Util.eventHaveErrors(event)) {
             setError(true);
         }
     }

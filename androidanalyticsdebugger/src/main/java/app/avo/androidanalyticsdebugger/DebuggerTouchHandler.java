@@ -1,9 +1,11 @@
 package app.avo.androidanalyticsdebugger;
 
+import android.content.Intent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
+
+import app.avo.androidanalyticsdebugger.debuggereventslist.DebuggerEventsListActivity;
 
 public class DebuggerTouchHandler implements View.OnTouchListener {
 
@@ -45,6 +47,9 @@ public class DebuggerTouchHandler implements View.OnTouchListener {
                 float endY = event.getRawY();
                 if (isAClick(initialTouchX, endX, initialTouchY, endY)) {
                     onClickListener.onClick(v);
+
+                    Intent eventsListActivityIntent = new Intent(v.getContext(), DebuggerEventsListActivity.class);
+                    v.getContext().startActivity(eventsListActivityIntent);
                 }
                 return true;
         }

@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         debugger = new Debugger();
-        debugger.showDebugger(this, DebuggerMode.bubble);
+        debugger.showDebugger(this, DebuggerMode.bar);
 
         DebuggerEventItem event = new DebuggerEventItem("App open", "app open id",
                 System.currentTimeMillis(), "App open", new ArrayList<DebuggerMessage>(),

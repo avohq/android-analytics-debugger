@@ -31,7 +31,6 @@
         android:textStyle="bold"
         android:padding="1dp"
         android:elevation="1dp"
-
         tools:ignore="UnusedAttribute"
         />
 

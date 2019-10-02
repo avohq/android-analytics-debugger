@@ -1,2 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="app.avo.androidanalyticsdebugger" />
+    xmlns:tools="http://schemas.android.com/tools"
+    package="app.avo.androidanalyticsdebugger">
+
+    <application
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".debuggereventslist.DebuggerEventsListActivity"/>
+    </application>
+
+</manifest>

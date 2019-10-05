@@ -1,5 +1,8 @@
 package app.avo.androidanalyticsdebugger;
 
+import android.content.Context;
+import android.util.DisplayMetrics;
+
 import androidx.annotation.Nullable;
 
 import java.text.SimpleDateFormat;
@@ -12,9 +15,13 @@ import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 
 public class Util {
 
-    public static boolean eventsHaveErrors(List<DebuggerEventItem> items) {
+    private static boolean eventsHaveErrors(List<DebuggerEventItem> items) {
+        if (items == null) {
+            return false;
+        }
+
         for (DebuggerEventItem event: items) {
-            if (!event.messages.isEmpty()) {
+            if (event.messages != null && !event.messages.isEmpty()) {
                 return true;
             }
         }
@@ -31,5 +38,9 @@ public class Util {
         }
 
         return new SimpleDateFormat("HH:mm:ss.ms", Locale.US).format(new Date(timestamp));
+    }
+
+    public static float convertDpToPixel(float dp, Context context) {
+        return dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 }

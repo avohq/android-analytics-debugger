@@ -1,4 +1,4 @@
-package app.avo.androidanalyticsdebugger;
+package app.avo.androidanalyticsdebugger.debuggerview;
 
 import android.view.View;
 

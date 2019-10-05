@@ -6,6 +6,40 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <Button
+        android:id="@+id/trigger_error_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Trigger error"
+        app:layout_constraintEnd_toStartOf="@+id/trigger_event_button"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/trigger_event_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:text="Trigger event"
+        app:layout_constraintEnd_toStartOf="@+id/trigger_event_delayed_button"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/trigger_error_button"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/trigger_event_delayed_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:text="Trigger event with delay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/trigger_event_button"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/hello_world"
         android:layout_width="wrap_content"
@@ -15,14 +49,5 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/trigger_error_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Trigger error"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

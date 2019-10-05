@@ -1,4 +1,4 @@
-package app.avo.androidanalyticsdebugger;
+package app.avo.androidanalyticsdebugger.debuggerview;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import java.util.Locale;
 
+import app.avo.androidanalyticsdebugger.R;
+import app.avo.androidanalyticsdebugger.Util;
 import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 
 public class BubbleViewContainer implements DebuggerViewContainer {
@@ -18,7 +20,7 @@ public class BubbleViewContainer implements DebuggerViewContainer {
 
     private int countedEvents = 0;
 
-    BubbleViewContainer(LayoutInflater layoutInflater) {
+    public BubbleViewContainer(LayoutInflater layoutInflater) {
         this.view = layoutInflater.inflate(R.layout.bubble_view, null);
 
         this.bubble = view.findViewById(R.id.bubble);

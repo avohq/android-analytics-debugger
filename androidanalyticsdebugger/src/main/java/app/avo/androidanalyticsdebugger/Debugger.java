@@ -13,10 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
+import app.avo.androidanalyticsdebugger.debuggerview.BarViewContainer;
+import app.avo.androidanalyticsdebugger.debuggerview.BubbleViewContainer;
+import app.avo.androidanalyticsdebugger.debuggerview.DebuggerViewContainer;
 
 public class Debugger {
 
     public static List<DebuggerEventItem> events = new ArrayList<>();
+    public static Runnable eventUpdateListener = null;
 
     private static WeakReference<DebuggerViewContainer> debuggerViewContainerRef;
 
@@ -57,6 +61,9 @@ public class Debugger {
         if (debuggerViewContainer != null) {
             debuggerViewContainer.showEvent(event);
             events.add(0, event);
+            if (eventUpdateListener != null) {
+                eventUpdateListener.run();
+            }
         }
     }
 
@@ -99,8 +106,4 @@ public class Debugger {
             rootActivity.getWindowManager().removeView(debuggerViewContainer.getView());
         }
     }
-
-/*    private float convertDpToPixel(float dp, Context context){
-        return dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
-    }*/
 }

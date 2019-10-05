@@ -9,8 +9,8 @@
         android:id="@+id/success_icon"
         android:layout_width="20dp"
         android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
         android:src="@drawable/tick"
         android:scaleType="centerInside"
         />
@@ -57,8 +57,8 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
         />
 
     <LinearLayout
@@ -66,7 +66,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:orientation="vertical" />
+        android:orientation="vertical"
+        />
 
     <View
         android:layout_width="match_parent"

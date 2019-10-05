@@ -1,13 +1,15 @@
-package app.avo.androidanalyticsdebugger;
+package app.avo.androidanalyticsdebugger.debuggerview;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import app.avo.androidanalyticsdebugger.R;
+import app.avo.androidanalyticsdebugger.Util;
 import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 
-class BarViewContainer implements DebuggerViewContainer {
+public class BarViewContainer implements DebuggerViewContainer {
 
     private View view;
 
@@ -17,7 +19,7 @@ class BarViewContainer implements DebuggerViewContainer {
     private ImageView successIcon;
     private ImageView dragHandle;
 
-    BarViewContainer(LayoutInflater layoutInflater) {
+    public BarViewContainer(LayoutInflater layoutInflater) {
         view = layoutInflater.inflate(R.layout.bar_view, null);
 
         timestamp = view.findViewById(R.id.timestamp);

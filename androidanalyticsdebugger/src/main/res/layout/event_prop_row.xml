@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/prop_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="6dp"
+        android:paddingBottom="6dp"
+        tools:text="Comment Id"
+        android:textStyle="bold"
+        android:textColor="@color/foreground"
+        />
+
+    <TextView
+        android:id="@+id/prop_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="6dp"
+        android:paddingBottom="6dp"
+        tools:text="sfsdsf3234s"
+        android:textColor="@color/foreground"
+        />
+
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/error"
+        android:layout_below="@id/prop_name"
+        android:layout_marginTop="6dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:paddingBottom="6dp"
+        tools:visibility="visible"
+        tools:text="Prop types should match one of: GIF, Image, Video or Quote but you provided gif."
+        android:visibility="gone"
+        />
+
+</RelativeLayout>

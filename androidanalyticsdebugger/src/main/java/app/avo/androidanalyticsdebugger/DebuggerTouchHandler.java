@@ -6,8 +6,9 @@ import android.view.View;
 import android.view.WindowManager;
 
 import app.avo.androidanalyticsdebugger.debuggereventslist.DebuggerEventsListActivity;
+import app.avo.androidanalyticsdebugger.debuggerview.DebuggerViewContainer;
 
-public class DebuggerTouchHandler implements View.OnTouchListener {
+class DebuggerTouchHandler implements View.OnTouchListener {
 
     private int initialY;
     private float initialTouchY;
@@ -19,7 +20,7 @@ public class DebuggerTouchHandler implements View.OnTouchListener {
     private WindowManager windowManager;
     private View.OnClickListener onClickListener;
 
-    public DebuggerTouchHandler(WindowManager windowManager, WindowManager.LayoutParams layoutParams,
+    DebuggerTouchHandler(WindowManager windowManager, WindowManager.LayoutParams layoutParams,
                                 DebuggerViewContainer debuggerViewContainer) {
         this.layoutParams = layoutParams;
         this.windowManager = windowManager;
@@ -46,6 +47,7 @@ public class DebuggerTouchHandler implements View.OnTouchListener {
                 float endX = event.getRawX();
                 float endY = event.getRawY();
                 if (isAClick(initialTouchX, endX, initialTouchY, endY)) {
+                    v.performClick();
                     onClickListener.onClick(v);
 
                     Intent eventsListActivityIntent = new Intent(v.getContext(), DebuggerEventsListActivity.class);

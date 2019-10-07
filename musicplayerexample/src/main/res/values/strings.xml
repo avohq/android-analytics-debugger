@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">MusicPlayerExample</string>
+    <string name="prev_track"><![CDATA[<]]></string>
+    <string name="play_label">Play</string>
+    <string name="pause_label">Pause</string>
+    <string name="next_track"><![CDATA[>]]></string>
+    <string name="track_time">%d / %d</string>
+
+</resources>

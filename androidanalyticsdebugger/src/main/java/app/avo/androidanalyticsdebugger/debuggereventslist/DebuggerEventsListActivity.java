@@ -1,10 +1,10 @@
 package app.avo.androidanalyticsdebugger.debuggereventslist;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,7 +18,7 @@ public class DebuggerEventsListActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getSupportActionBar().hide();
+        hideActionBar();
 
         setContentView(R.layout.activity_debugger_events_list_activity);
 
@@ -41,6 +41,13 @@ public class DebuggerEventsListActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
         };
+    }
+
+    private void hideActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.hide();
+        }
     }
 
     @Override

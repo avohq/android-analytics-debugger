@@ -1,2 +1,2 @@
-include ':app', ':androidanalyticsdebugger'
+include ':sandboxexample', ':androidanalyticsdebugger', ':musicplayerexample'
 rootProject.name='AndroidAnalyticsDebuggerExample'

@@ -22,10 +22,13 @@ public class Debugger {
     public static List<DebuggerEventItem> events = new ArrayList<>();
     public static Runnable eventUpdateListener = null;
 
-    private static WeakReference<DebuggerViewContainer> debuggerViewContainerRef;
+    private static WeakReference<DebuggerViewContainer> debuggerViewContainerRef = new WeakReference<>(null);
 
     @SuppressLint("ClickableViewAccessibility")
     public void showDebugger(final Activity rootActivity, DebuggerMode mode) {
+
+        hideDebugger(rootActivity);
+
         final WindowManager windowManager = rootActivity.getWindowManager();
         final DisplayMetrics displayMetrics = new DisplayMetrics();
         windowManager.getDefaultDisplay().getMetrics(displayMetrics);
@@ -103,7 +106,9 @@ public class Debugger {
     public void hideDebugger(Activity rootActivity) {
         DebuggerViewContainer debuggerViewContainer = debuggerViewContainerRef.get();
         if (debuggerViewContainer != null) {
-            rootActivity.getWindowManager().removeView(debuggerViewContainer.getView());
+            try {
+                rootActivity.getWindowManager().removeView(debuggerViewContainer.getView());
+            } catch (Throwable ignored) {}
         }
     }
 }

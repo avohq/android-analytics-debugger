@@ -3,4 +3,7 @@
     <string name="debugger_logo">Debugger logo</string>
     <string name="no_events_yet_label">No events yet</string>
     <string name="zero_num_label">0</string>
+
+    <string name="close_button_description">close button</string>
+    <string name="toggle_content_expansion_button_description">toggle content expansion button</string>
 </resources>

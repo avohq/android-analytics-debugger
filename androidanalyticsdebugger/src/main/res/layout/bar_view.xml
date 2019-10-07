@@ -22,7 +22,7 @@
         android:layout_centerVertical="true"
         android:src="@drawable/tick"
         android:scaleType="centerInside"
-        />
+        tools:ignore="ContentDescription" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -31,8 +31,10 @@
         android:layout_centerVertical="true"
         android:layout_toRightOf="@id/success_icon"
         android:layout_toEndOf="@id/success_icon"
+        android:layout_toStartOf="@id/drag_handle"
         android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp">
+        android:layout_marginStart="8dp"
+        android:layout_toLeftOf="@id/drag_handle">
 
         <TextView
             android:id="@+id/timestamp"
@@ -43,17 +45,21 @@
             tools:text="10:16:60.674"
             tools:ignore="SmallSp"
             android:textStyle="bold"
+            android:ellipsize="end"
+            android:lines="1"
             />
 
         <TextView
             android:id="@+id/event_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             tools:text="Comment Posted"
             android:textSize="14sp"
             android:textColor="@color/foreground"
             android:text="@string/no_events_yet_label"
             android:textStyle="bold"
+            android:ellipsize="end"
+            android:lines="1"
             />
 
     </LinearLayout>
@@ -68,7 +74,7 @@
         android:layout_centerVertical="true"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        />
+        tools:ignore="ContentDescription" />
 
     <View
         android:layout_width="match_parent"

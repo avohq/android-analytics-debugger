@@ -42,7 +42,7 @@ public class SandboxActivity extends AppCompatActivity {
                     DebuggerEventItem event = new DebuggerEventItem();
                     event.id = "ew23fe";
                     event.key = "Key";
-                    event.name = "Error event";
+                    event.name = "Error event Error event Error event Error event Error event Error event";
                     event.timestamp = System.currentTimeMillis();
                     event.eventProps = new ArrayList<>();
 

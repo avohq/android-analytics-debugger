@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,7 +11,7 @@
         android:layout_height="16dp"
         android:layout_centerHorizontal="true"
         android:layout_margin="16dp"
-        />
+        tools:ignore="ContentDescription" />
 
     <View
         android:id="@+id/top_divider"
@@ -30,7 +31,7 @@
         android:layout_alignParentTop="true"
         android:layout_above="@id/top_divider"
         android:src="@drawable/close_button"
-        />
+        android:contentDescription="@string/close_button_description" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/events_list"

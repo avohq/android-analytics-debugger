@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -13,7 +14,7 @@
         android:layout_marginLeft="24dp"
         android:src="@drawable/tick"
         android:scaleType="centerInside"
-        />
+        tools:ignore="ContentDescription" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -24,7 +25,10 @@
         android:layout_marginTop="8dp"
         android:layout_toEndOf="@id/success_icon"
         android:layout_toRightOf="@id/success_icon"
-        android:orientation="vertical">
+        android:layout_toLeftOf="@id/expend_button"
+        android:layout_toStartOf="@id/expend_button"
+        android:orientation="vertical"
+        >
 
         <TextView
             android:id="@+id/timestamp"
@@ -33,18 +37,24 @@
             android:textColor="@color/foregroundLight"
             android:textSize="10sp"
             android:textStyle="bold"
+            android:ellipsize="end"
+            android:lines="1"
             tools:ignore="SmallSp"
             tools:text="10:16:60.674" />
 
         <TextView
             android:id="@+id/event_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:text="@string/no_events_yet_label"
             android:textColor="@color/foreground"
             android:textSize="14sp"
             android:textStyle="bold"
-            tools:text="Comment Posted" />
+            android:ellipsize="end"
+            android:lines="1"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMinTextSize="10sp"
+            tools:text="Comment Posted Comment Posted Comment Posted" />
 
     </LinearLayout>
 
@@ -59,7 +69,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
-        />
+        android:contentDescription="@string/toggle_content_expansion_button_description" />
 
     <LinearLayout
         android:id="@+id/expended_content"

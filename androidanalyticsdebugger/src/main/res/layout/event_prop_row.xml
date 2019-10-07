@@ -30,7 +30,7 @@
         android:paddingBottom="6dp"
         tools:text="sfsdsf3234s"
         android:textColor="@color/foreground"
-        />
+        tools:ignore="RelativeOverlap" />
 
     <TextView
         android:id="@+id/message"

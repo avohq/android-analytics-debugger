@@ -8,9 +8,9 @@ import android.graphics.PixelFormat;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
+import androidx.recyclerview.widget.SortedList;
+
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
 
 import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 import app.avo.androidanalyticsdebugger.debuggerview.BarViewContainer;
@@ -19,10 +19,12 @@ import app.avo.androidanalyticsdebugger.debuggerview.DebuggerViewContainer;
 
 public class Debugger {
 
-    public static List<DebuggerEventItem> events = new ArrayList<>();
+    public static SortedList<DebuggerEventItem> events = new SortedList<>(DebuggerEventItem.class,
+            new EventsSorting());
     public static Runnable eventUpdateListener = null;
 
-    private static WeakReference<DebuggerViewContainer> debuggerViewContainerRef = new WeakReference<>(null);
+    private static WeakReference<DebuggerViewContainer> debuggerViewContainerRef =
+            new WeakReference<>(null);
 
     @SuppressLint("ClickableViewAccessibility")
     public void showDebugger(final Activity rootActivity, DebuggerMode mode) {
@@ -63,7 +65,7 @@ public class Debugger {
 
         if (debuggerViewContainer != null) {
             debuggerViewContainer.showEvent(event);
-            events.add(0, event);
+            events.add(event);
             if (eventUpdateListener != null) {
                 eventUpdateListener.run();
             }
@@ -110,5 +112,34 @@ public class Debugger {
                 rootActivity.getWindowManager().removeView(debuggerViewContainer.getView());
             } catch (Throwable ignored) {}
         }
+    }
+
+    private static class EventsSorting extends SortedList.Callback<DebuggerEventItem> {
+        @Override
+        public int compare(DebuggerEventItem o1, DebuggerEventItem o2) {
+            return o2.timestamp.compareTo(o1.timestamp);
+        }
+
+        @Override
+        public void onChanged(int position, int count) {}
+
+        @Override
+        public boolean areContentsTheSame(DebuggerEventItem oldItem, DebuggerEventItem newItem) {
+            return oldItem.equals(newItem);
+        }
+
+        @Override
+        public boolean areItemsTheSame(DebuggerEventItem item1, DebuggerEventItem item2) {
+            return item1 == item2;
+        }
+
+        @Override
+        public void onInserted(int position, int count) {}
+
+        @Override
+        public void onRemoved(int position, int count) {}
+
+        @Override
+        public void onMoved(int fromPosition, int toPosition) {}
     }
 }

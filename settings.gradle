@@ -1,2 +1,2 @@
 include ':sandboxexample', ':androidanalyticsdebugger', ':musicplayerexample'
-rootProject.name='AndroidAnalyticsDebuggerExample'
+rootProject.name='AndroidAnalyticsDebugger'

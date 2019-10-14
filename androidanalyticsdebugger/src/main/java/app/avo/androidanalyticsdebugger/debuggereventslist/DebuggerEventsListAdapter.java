@@ -158,7 +158,7 @@ public class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEven
             }
 
             propName.setText(prop.name);
-            propValue.setText(prop.value != null ? prop.value.toString() : "");
+            propValue.setText(prop.value != null ? prop.value : "");
 
             holder.expendedContent.addView(propRowView);
             layoutInflater.inflate(R.layout.prop_divider, holder.expendedContent, true);

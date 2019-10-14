@@ -1,6 +1,9 @@
 package app.avo.androidanalyticsdebugger.model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class DebuggerEventItem {
 
@@ -14,14 +17,70 @@ public class DebuggerEventItem {
 
     public DebuggerEventItem() {}
 
-    public DebuggerEventItem(String key, String id, Long timestamp, String name, List<DebuggerMessage> messages, List<DebuggerProp> eventProps, List<DebuggerProp> userProps) {
+    public DebuggerEventItem(String key, String id, Long timestamp, String name,
+                             List<Map<String, String>> messages,
+                             List<Map<String, String>> eventProps,
+                             List<Map<String, String>> userProps) {
         this.key = key;
         this.id = id;
         this.timestamp = timestamp;
         this.name = name;
-        this.messages = messages;
-        this.eventProps = eventProps;
-        this.userProps = userProps;
+        this.messages = new ArrayList<>();
+        for (Map<String, String> message: messages) {
+            DebuggerMessage debuggerMessage = createMessage(message);
+
+            if (debuggerMessage != null) {
+                this.messages.add(debuggerMessage);
+            }
+        }
+
+        this.eventProps = new ArrayList<>();
+        for (Map<String, String> eventProp: eventProps) {
+            DebuggerProp prop = createProp(eventProp);
+            if (prop != null) {
+                this.eventProps.add(prop);
+            }
+        }
+
+        this.userProps = new ArrayList<>();
+        for (Map<String, String> userProp: userProps) {
+            DebuggerProp prop = createProp(userProp);
+            if (prop != null) {
+                this.userProps.add(prop);
+            }
+        }
+    }
+
+    private DebuggerMessage createMessage(Map<String, String> messageMap) {
+
+        String tag = messageMap.get("tag");
+        String propertyId = messageMap.get("propertyId");
+        String message = messageMap.get("message");
+
+        if (tag == null || propertyId == null || message == null) {
+            return null;
+        }
+
+        List<String> allowedTypesList = new ArrayList<>();
+        String allowedTypesString = messageMap.get("allowedTypes");
+        if (allowedTypesString != null) {
+            allowedTypesList = Arrays.asList(allowedTypesString.split(","));
+        }
+
+        return new DebuggerMessage(tag, propertyId, message, allowedTypesList,
+                messageMap.get("providedType"));
+    }
+
+    private DebuggerProp createProp(Map<String, String> prop) {
+        String id = prop.get("id");
+        String name = prop.get("name");
+        String value = prop.get("value");
+
+        if (id == null || name == null || value == null) {
+            return null;
+        }
+
+        return new DebuggerProp(id, name, value);
     }
 
     @SuppressWarnings("EqualsReplaceableByObjectsCall")

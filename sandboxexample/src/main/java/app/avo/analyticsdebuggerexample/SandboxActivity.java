@@ -9,12 +9,14 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import app.avo.androidanalyticsdebugger.Debugger;
 import app.avo.androidanalyticsdebugger.DebuggerMode;
 import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
-import app.avo.androidanalyticsdebugger.model.DebuggerMessage;
 import app.avo.androidanalyticsdebugger.model.DebuggerProp;
+import app.avo.independent.Independent;
 
 public class SandboxActivity extends AppCompatActivity {
 
@@ -28,10 +30,10 @@ public class SandboxActivity extends AppCompatActivity {
         debugger = new Debugger();
         debugger.showDebugger(this, DebuggerMode.bar);
 
-        DebuggerEventItem event = new DebuggerEventItem("App open", "app open id",
-                System.currentTimeMillis(), "App open", new ArrayList<DebuggerMessage>(),
-                new ArrayList<DebuggerProp>(), new ArrayList<DebuggerProp>());
-        debugger.publishEvent(event);
+        Independent.setDebugger(debugger);
+        Independent.sendEvent("App open", "app open id",
+                System.currentTimeMillis(), "App open", new ArrayList<Map<String, String>>(),
+                new ArrayList<Map<String, String>>(), new ArrayList<Map<String, String>>());
 
         Button triggerErrorButton = findViewById(R.id.trigger_error_button);
 
@@ -39,35 +41,33 @@ public class SandboxActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (debugger != null) {
-                    DebuggerEventItem event = new DebuggerEventItem();
-                    event.id = "ew23fe";
-                    event.key = "Key";
-                    event.name = "Error event Error event Error event Error event Error event Error event";
-                    event.timestamp = System.currentTimeMillis();
-                    event.eventProps = new ArrayList<>();
+                    ArrayList<Map<String, String>> eventProps = new ArrayList<>();
 
-                    event.eventProps.add(new DebuggerProp());
-                    event.eventProps.get(0).id = "event prop id";
-                    event.eventProps.get(0).name = "Post Type";
-                    event.eventProps.get(0).value = "gif";
+                    eventProps.add(new HashMap<String, String>() {{
+                        put("id", "event prop id");
+                        put("name", "Post Type");
+                        put("value", "gif");
+                    }});
+                    eventProps.add(new HashMap<String, String>() {{
+                        put("id", "good event id");
+                        put("name", "Comment Id");
+                        put("value", "sdfdf2");
+                    }});
 
-                    event.eventProps.add(new DebuggerProp());
-                    event.eventProps.get(1).id = "good event id";
-                    event.eventProps.get(1).name = "Comment Id";
-                    event.eventProps.get(1).value = "sdfdf2";
+                    ArrayList<Map<String, String>> messages = new ArrayList<>();
+                    messages.add(new HashMap<String, String>() {{
+                        put("tag", "tagValue");
+                        put("propertyId", "event prop id");
+                        put("message", "Post Type should match one of: GIF, Image, Video or Quote but you provided gif.");
+                        put("allowedTypes", "GIF,Image,Video,Quote");
+                        put("providedType", "gif");
+                    }});
 
-                    event.messages = new ArrayList<>();
-                    event.messages.add(new DebuggerMessage("tag", "event prop id",
-                            "Post Type should match one of: GIF, Image, Video or Quote but you provided gif.",
-                            new ArrayList<String>() {{
-                                add("GIF");
-                                add("Image");
-                                add("Video");
-                                add("Quote");
-                            }},
-                            "gif"));
-
-                    debugger.publishEvent(event);
+                    Independent.sendEvent("Key", "ew23fe",
+                            System.currentTimeMillis(),
+                            "Error event Error event Error event Error event Error event Error event",
+                            messages,
+                            eventProps, new ArrayList<Map<String, String>>());
                 }
             }
         });

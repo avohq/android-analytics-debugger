@@ -11,11 +11,15 @@ import android.view.WindowManager;
 import androidx.recyclerview.widget.SortedList;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
+import java.util.Map;
 
 import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 import app.avo.androidanalyticsdebugger.debuggerview.BarViewContainer;
 import app.avo.androidanalyticsdebugger.debuggerview.BubbleViewContainer;
 import app.avo.androidanalyticsdebugger.debuggerview.DebuggerViewContainer;
+import app.avo.androidanalyticsdebugger.model.DebuggerMessage;
+import app.avo.androidanalyticsdebugger.model.DebuggerProp;
 
 public class Debugger {
 
@@ -70,6 +74,18 @@ public class Debugger {
                 eventUpdateListener.run();
             }
         }
+    }
+
+    @SuppressWarnings("unused")
+    public void publishEvent(String key, String id, Long timestamp, String name,
+                             List<Map<String, String>> messages,
+                             List<Map<String, String>> eventProps,
+                             List<Map<String, String>> userProps) {
+
+        DebuggerEventItem event = new DebuggerEventItem(key, id, timestamp, name,
+                messages, eventProps, userProps);
+
+        publishEvent(event);
     }
 
     private WindowManager.LayoutParams prepareWindowManagerLayoutParams(Context context,

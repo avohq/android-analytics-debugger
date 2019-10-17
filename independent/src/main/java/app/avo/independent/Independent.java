@@ -14,7 +14,7 @@ public class Independent {
         Independent.debugger = debugger;
     }
 
-    public static void sendEvent(String key, String id, Long timestamp, String name,
+    public static void sendEvent(String id, Long timestamp, String name,
                                  List<Map<String, String>> messages,
                                  List<Map<String, String>> eventProps,
                                  List<Map<String, String>> userProps) {
@@ -22,11 +22,10 @@ public class Independent {
 
             try {
                 Method method = Independent.debugger.getClass().getMethod("publishEvent",
-                        String.class, String.class, Long.class, String.class, List.class, List.class,
+                        String.class, Long.class, String.class, List.class, List.class,
                         List.class);
 
-                method.invoke(Independent.debugger,
-                        key, id, timestamp, name, messages, eventProps, userProps);
+                method.invoke(Independent.debugger, id, timestamp, name, messages, eventProps, userProps);
 
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();

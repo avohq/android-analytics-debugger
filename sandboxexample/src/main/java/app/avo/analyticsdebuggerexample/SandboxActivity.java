@@ -31,9 +31,10 @@ public class SandboxActivity extends AppCompatActivity {
         debugger.showDebugger(this, DebuggerMode.bar);
 
         Independent.setDebugger(debugger);
-        Independent.sendEvent("App open", "app open id",
-                System.currentTimeMillis(), "App open", new ArrayList<Map<String, String>>(),
-                new ArrayList<Map<String, String>>(), new ArrayList<Map<String, String>>());
+        Independent.sendEvent("app open id", System.currentTimeMillis(), "App open",
+                new ArrayList<Map<String, String>>(),
+                new ArrayList<Map<String, String>>(),
+                new ArrayList<Map<String, String>>());
 
         Button triggerErrorButton = findViewById(R.id.trigger_error_button);
 
@@ -63,7 +64,7 @@ public class SandboxActivity extends AppCompatActivity {
                         put("providedType", "gif");
                     }});
 
-                    Independent.sendEvent("Key", "ew23fe",
+                    Independent.sendEvent("ew23fe",
                             System.currentTimeMillis(),
                             "Error event Error event Error event Error event Error event Error event",
                             messages,
@@ -80,7 +81,6 @@ public class SandboxActivity extends AppCompatActivity {
                 if (debugger != null) {
                     DebuggerEventItem event = new DebuggerEventItem();
                     event.id = "ef42ee";
-                    event.key = "Key";
                     event.name = "Something happened";
                     event.timestamp = System.currentTimeMillis();
                     event.userProps = new ArrayList<>();
@@ -116,7 +116,6 @@ public class SandboxActivity extends AppCompatActivity {
                         if (debugger != null) {
                             DebuggerEventItem event = new DebuggerEventItem();
                             event.id = "ef42aee";
-                            event.key = "Key";
                             event.name = "Delayed";
                             event.timestamp = System.currentTimeMillis();
                             event.userProps = new ArrayList<>();

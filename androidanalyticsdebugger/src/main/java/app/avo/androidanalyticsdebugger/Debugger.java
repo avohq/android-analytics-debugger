@@ -75,12 +75,12 @@ public class Debugger {
     }
 
     @SuppressWarnings("unused")
-    public void publishEvent(String key, String id, Long timestamp, String name,
+    public void publishEvent(String id, Long timestamp, String name,
                              List<Map<String, String>> messages,
                              List<Map<String, String>> eventProps,
                              List<Map<String, String>> userProps) {
 
-        DebuggerEventItem event = new DebuggerEventItem(key, id, timestamp, name,
+        DebuggerEventItem event = new DebuggerEventItem(id, timestamp, name,
                 messages, eventProps, userProps);
 
         publishEvent(event);

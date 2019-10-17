@@ -7,7 +7,6 @@ import java.util.Map;
 
 public class DebuggerEventItem {
 
-    public String key;
     public String id;
     public Long timestamp;
     public String name;
@@ -17,11 +16,10 @@ public class DebuggerEventItem {
 
     public DebuggerEventItem() {}
 
-    public DebuggerEventItem(String key, String id, Long timestamp, String name,
+    public DebuggerEventItem(String id, Long timestamp, String name,
                              List<Map<String, String>> messages,
                              List<Map<String, String>> eventProps,
                              List<Map<String, String>> userProps) {
-        this.key = key;
         this.id = id;
         this.timestamp = timestamp;
         this.name = name;
@@ -91,7 +89,6 @@ public class DebuggerEventItem {
 
         DebuggerEventItem that = (DebuggerEventItem) o;
 
-        if (!key.equals(that.key)) return false;
         if (!id.equals(that.id)) return false;
         if (!timestamp.equals(that.timestamp)) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
@@ -104,8 +101,7 @@ public class DebuggerEventItem {
 
     @Override
     public int hashCode() {
-        int result = key.hashCode();
-        result = 31 * result + id.hashCode();
+        int result = id.hashCode();
         result = 31 * result + timestamp.hashCode();
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (messages != null ? messages.hashCode() : 0);

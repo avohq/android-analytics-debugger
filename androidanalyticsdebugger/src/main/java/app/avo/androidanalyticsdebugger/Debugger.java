@@ -18,8 +18,6 @@ import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 import app.avo.androidanalyticsdebugger.debuggerview.BarViewContainer;
 import app.avo.androidanalyticsdebugger.debuggerview.BubbleViewContainer;
 import app.avo.androidanalyticsdebugger.debuggerview.DebuggerViewContainer;
-import app.avo.androidanalyticsdebugger.model.DebuggerMessage;
-import app.avo.androidanalyticsdebugger.model.DebuggerProp;
 
 public class Debugger {
 
@@ -88,6 +86,12 @@ public class Debugger {
         publishEvent(event);
     }
 
+    @SuppressWarnings("unused")
+    public boolean isEnabled() {
+        DebuggerViewContainer debuggerViewContainer = debuggerViewContainerRef.get();
+        return debuggerViewContainer != null;
+    }
+
     private WindowManager.LayoutParams prepareWindowManagerLayoutParams(Context context,
                                                                         DisplayMetrics displayMetrics) {
         int barHeight = 0;
@@ -126,6 +130,7 @@ public class Debugger {
         if (debuggerViewContainer != null) {
             try {
                 rootActivity.getWindowManager().removeView(debuggerViewContainer.getView());
+                debuggerViewContainerRef = new WeakReference<>(null);
             } catch (Throwable ignored) {}
         }
     }

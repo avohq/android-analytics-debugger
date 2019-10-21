@@ -7,6 +7,7 @@ import android.view.View
 import app.avo.androidanalyticsdebugger.Debugger
 import app.avo.androidanalyticsdebugger.DebuggerMode
 import kotlinx.android.synthetic.main.activity_music_player.*
+import sh.avo.Avo
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -16,14 +17,38 @@ class ExampleMusicPlayerActivity : AppCompatActivity() {
 
     private var timer: Timer? = null
 
+    private lateinit var debugger: Debugger
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        debugger = Debugger()
+        debugger.showDebugger(this, DebuggerMode.bar)
+
+        Avo.initAvo(Avo.AvoEnv.PROD, object: Avo.ICustomDestination {
+            override fun make(env: Avo.AvoEnv?) {
+            }
+
+            override fun logEvent(eventName: String?, eventProperties: MutableMap<String, Any>?) {
+            }
+
+            override fun setUserProperties(userId: String?, userProperties: MutableMap<String, Any>?) {
+            }
+
+            override fun identify(userId: String?) {
+            }
+
+            override fun unidentify() {
+            }
+        }, null, debugger)
+
+        Avo.appOpened()
+
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
         setContentView(R.layout.activity_music_player)
 
         initialState()
 
-        initDebugger()
+        initShowDebuggerButtons()
 
         play_pause.setOnClickListener {
             onPlayPauseClick()
@@ -36,9 +61,7 @@ class ExampleMusicPlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun initDebugger() {
-        val debugger = Debugger()
-
+    private fun initShowDebuggerButtons() {
         show_bubble_debugger.setOnClickListener {
             debugger.showDebugger(this, DebuggerMode.bubble)
         }
@@ -58,6 +81,8 @@ class ExampleMusicPlayerActivity : AppCompatActivity() {
 
     private fun onPrevTrackClick() {
         if (logic.loadPrevTrack(applicationContext)) {
+            Avo.playPreviousTrack(logic.nextTrackName(), logic.trackName())
+
             showCurrentTrack()
             manageNavigationButtonsVisibilityOnPrev()
         }
@@ -65,6 +90,8 @@ class ExampleMusicPlayerActivity : AppCompatActivity() {
 
     private fun onNextTrackClick() {
         if (logic.loadNextTrack(applicationContext)) {
+            Avo.playNextTrack(logic.prevTrackName(), logic.trackName())
+
             showCurrentTrack()
             manageNavigationButtonsVisibilityOnNext()
         }
@@ -73,8 +100,10 @@ class ExampleMusicPlayerActivity : AppCompatActivity() {
     private fun onPlayPauseClick() {
         if (!logic.player.isPlaying()) {
             play()
+            Avo.play(logic.trackName())
         } else {
             pause()
+            Avo.pause(logic.trackName())
         }
     }
 

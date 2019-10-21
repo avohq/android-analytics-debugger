@@ -87,7 +87,7 @@ public class Debugger {
     }
 
     @SuppressWarnings("unused")
-    public boolean isEnabled() {
+    public Boolean isEnabled() {
         DebuggerViewContainer debuggerViewContainer = debuggerViewContainerRef.get();
         return debuggerViewContainer != null;
     }

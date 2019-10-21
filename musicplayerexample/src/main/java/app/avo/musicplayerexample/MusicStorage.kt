@@ -17,7 +17,11 @@ class MusicStorage {
     }
 
     fun trackFile(position: Int): String {
-        return this.tracks[position]
+        return if (position < tracks.size) {
+            this.tracks[position]
+        } else {
+            ""
+        }
     }
 
     fun trackAsset(position: Int): Int {

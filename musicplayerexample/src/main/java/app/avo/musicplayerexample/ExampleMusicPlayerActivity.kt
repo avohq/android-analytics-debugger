@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 import android.os.Bundle
 import android.view.View
-import app.avo.androidanalyticsdebugger.Debugger
+import app.avo.androidanalyticsdebugger.DebuggerManager
 import app.avo.androidanalyticsdebugger.DebuggerMode
 import kotlinx.android.synthetic.main.activity_music_player.*
 import sh.avo.Avo
@@ -17,28 +17,12 @@ class ExampleMusicPlayerActivity : AppCompatActivity() {
 
     private var timer: Timer? = null
 
-    private lateinit var debugger: Debugger
+    private val debuggerManager: DebuggerManager
+        get() = (application as MusciPlayerExampleApplication).debugger
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        debugger = Debugger()
-        debugger.showDebugger(this, DebuggerMode.bar)
 
-        Avo.initAvo(Avo.AvoEnv.PROD, object: Avo.ICustomDestination {
-            override fun make(env: Avo.AvoEnv?) {
-            }
-
-            override fun logEvent(eventName: String?, eventProperties: MutableMap<String, Any>?) {
-            }
-
-            override fun setUserProperties(userId: String?, userProperties: MutableMap<String, Any>?) {
-            }
-
-            override fun identify(userId: String?) {
-            }
-
-            override fun unidentify() {
-            }
-        }, null, debugger)
+        debuggerManager.showDebugger(this, DebuggerMode.bar)
 
         Avo.appOpened()
 
@@ -63,13 +47,13 @@ class ExampleMusicPlayerActivity : AppCompatActivity() {
 
     private fun initShowDebuggerButtons() {
         show_bubble_debugger.setOnClickListener {
-            debugger.showDebugger(this, DebuggerMode.bubble)
+            debuggerManager.showDebugger(this, DebuggerMode.bubble)
         }
         show_bar_debugger.setOnClickListener {
-            debugger.showDebugger(this, DebuggerMode.bar)
+            debuggerManager.showDebugger(this, DebuggerMode.bar)
         }
         hide_debugger.setOnClickListener {
-            debugger.hideDebugger(this)
+            debuggerManager.hideDebugger(this)
         }
     }
 

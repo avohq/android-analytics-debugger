@@ -1,7 +1,7 @@
 package app.avo.analyticsdebuggerexample;
 
 import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import app.avo.androidanalyticsdebugger.Debugger;
+import app.avo.androidanalyticsdebugger.DebuggerManager;
 import app.avo.androidanalyticsdebugger.DebuggerMode;
 import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 import app.avo.androidanalyticsdebugger.model.DebuggerProp;
@@ -20,17 +20,16 @@ import app.avo.independent.Independent;
 
 public class SandboxActivity extends AppCompatActivity {
 
-    Debugger debugger;
+    DebuggerManager debuggerManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sandbox);
 
-        debugger = new Debugger();
-        debugger.showDebugger(this, DebuggerMode.bar);
+        debuggerManager = new DebuggerManager();
 
-        Independent.setDebugger(debugger);
+        Independent.setDebugger(debuggerManager);
         Independent.sendEvent("app open id", System.currentTimeMillis(), "App open",
                 new ArrayList<Map<String, String>>(),
                 new ArrayList<Map<String, String>>(),
@@ -41,7 +40,7 @@ public class SandboxActivity extends AppCompatActivity {
         triggerErrorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (debugger != null) {
+                if (debuggerManager != null) {
                     ArrayList<Map<String, String>> eventProps = new ArrayList<>();
 
                     eventProps.add(new HashMap<String, String>() {{
@@ -78,7 +77,7 @@ public class SandboxActivity extends AppCompatActivity {
         triggerEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (debugger != null) {
+                if (debuggerManager != null) {
                     DebuggerEventItem event = new DebuggerEventItem();
                     event.id = "ef42ee";
                     event.name = "Something happened";
@@ -100,7 +99,7 @@ public class SandboxActivity extends AppCompatActivity {
                     event.eventProps.get(0).name = "Comment Id";
                     event.eventProps.get(0).value = "sdfdf2";
 
-                    debugger.publishEvent(event);
+                    debuggerManager.publishEvent(event);
                 }
             }
         });
@@ -113,7 +112,7 @@ public class SandboxActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (debugger != null) {
+                        if (debuggerManager != null) {
                             DebuggerEventItem event = new DebuggerEventItem();
                             event.id = "ef42aee";
                             event.name = "Delayed";
@@ -135,7 +134,7 @@ public class SandboxActivity extends AppCompatActivity {
                             event.eventProps.get(0).name = "Comment Id";
                             event.eventProps.get(0).value = "sdfdf2";
 
-                            debugger.publishEvent(event);
+                            debuggerManager.publishEvent(event);
 
                             Toast.makeText(SandboxActivity.this, "Event posted", Toast.LENGTH_SHORT).show();
                         }
@@ -143,5 +142,21 @@ public class SandboxActivity extends AppCompatActivity {
                 }, 5000);
             }
         });
+
+        Button openAnotherActivity = findViewById(R.id.open_another_activity);
+        openAnotherActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SandboxActivity.this, AnotherActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        debuggerManager.showDebugger(this, DebuggerMode.bar);
     }
 }

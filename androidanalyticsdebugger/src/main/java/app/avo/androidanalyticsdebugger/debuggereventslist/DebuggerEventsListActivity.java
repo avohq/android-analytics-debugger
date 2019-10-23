@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import app.avo.androidanalyticsdebugger.Debugger;
+import app.avo.androidanalyticsdebugger.DebuggerManager;
 import app.avo.androidanalyticsdebugger.R;
 
 public class DebuggerEventsListActivity extends AppCompatActivity {
@@ -35,7 +35,7 @@ public class DebuggerEventsListActivity extends AppCompatActivity {
             }
         });
 
-        Debugger.eventUpdateListener = new Runnable() {
+        DebuggerManager.eventUpdateListener = new Runnable() {
             @Override
             public void run() {
                 adapter.notifyDataSetChanged();
@@ -54,6 +54,6 @@ public class DebuggerEventsListActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        Debugger.eventUpdateListener = null;
+        DebuggerManager.eventUpdateListener = null;
     }
 }

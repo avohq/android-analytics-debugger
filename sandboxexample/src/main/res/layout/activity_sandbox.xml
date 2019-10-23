@@ -40,4 +40,14 @@
         app:layout_constraintStart_toEndOf="@+id/trigger_event_button"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/open_another_activity"
+        app:layout_constraintTop_toBottomOf="@id/trigger_event_delayed_button"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="open another activity"
+        android:layout_marginLeft="16dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -39,7 +39,7 @@ public class DebuggerManager {
     @SuppressWarnings("WeakerAccess")
     public void showDebugger(final Activity rootActivity, DebuggerMode mode, boolean systemOverlay) {
 
-        if (checkDrawOverlayPermission(rootActivity)) {
+        if (!systemOverlay || checkDrawOverlayPermission(rootActivity)) {
             hideDebugger(rootActivity);
 
             final WindowManager windowManager = rootActivity.getWindowManager();

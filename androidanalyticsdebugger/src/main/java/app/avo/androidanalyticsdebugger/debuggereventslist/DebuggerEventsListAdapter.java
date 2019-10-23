@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import app.avo.androidanalyticsdebugger.Debugger;
+import app.avo.androidanalyticsdebugger.DebuggerManager;
 import app.avo.androidanalyticsdebugger.R;
 import app.avo.androidanalyticsdebugger.Util;
 import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
@@ -39,7 +39,7 @@ public class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEven
     @Override
     public void onBindViewHolder(@NonNull final DebuggerEventViewHolder holder, int position) {
 
-        final DebuggerEventItem event = Debugger.events.get(position);
+        final DebuggerEventItem event = DebuggerManager.events.get(position);
         boolean hasError = Util.eventHaveErrors(event);
         final boolean[] expended = {position == 0 || hasError};
 
@@ -158,7 +158,7 @@ public class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEven
             }
 
             propName.setText(prop.name);
-            propValue.setText(prop.value != null ? prop.value.toString() : "");
+            propValue.setText(prop.value != null ? prop.value : "");
 
             holder.expendedContent.addView(propRowView);
             layoutInflater.inflate(R.layout.prop_divider, holder.expendedContent, true);
@@ -199,7 +199,7 @@ public class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEven
 
     @Override
     public int getItemCount() {
-        return Debugger.events.size();
+        return DebuggerManager.events.size();
     }
 
     static class DebuggerEventViewHolder extends RecyclerView.ViewHolder {

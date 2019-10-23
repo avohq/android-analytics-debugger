@@ -35,6 +35,14 @@ class ExampleMusicPlayerLogic {
         player.load(context, musicStorage.trackAsset(currentTrackPosition))
     }
 
+    fun prevTrackName(): String {
+        return musicStorage.trackName(currentTrackPosition - 1)
+    }
+
+    fun nextTrackName(): String {
+        return musicStorage.trackName(currentTrackPosition + 1)
+    }
+
     fun trackName(): String {
         return musicStorage.trackName(currentTrackPosition)
     }

@@ -1,23 +1,29 @@
 package app.avo.androidanalyticsdebugger;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.PixelFormat;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.SortedList;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
+import java.util.Map;
 
 import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 import app.avo.androidanalyticsdebugger.debuggerview.BarViewContainer;
 import app.avo.androidanalyticsdebugger.debuggerview.BubbleViewContainer;
 import app.avo.androidanalyticsdebugger.debuggerview.DebuggerViewContainer;
 
-public class Debugger {
+public class DebuggerManager {
 
     public static SortedList<DebuggerEventItem> events = new SortedList<>(DebuggerEventItem.class,
             new EventsSorting());
@@ -26,27 +32,51 @@ public class Debugger {
     private static WeakReference<DebuggerViewContainer> debuggerViewContainerRef =
             new WeakReference<>(null);
 
-    @SuppressLint("ClickableViewAccessibility")
     public void showDebugger(final Activity rootActivity, DebuggerMode mode) {
+        showDebugger(rootActivity, mode, false);
+    }
 
-        hideDebugger(rootActivity);
+    @SuppressWarnings("WeakerAccess")
+    public void showDebugger(final Activity rootActivity, DebuggerMode mode, boolean systemOverlay) {
 
-        final WindowManager windowManager = rootActivity.getWindowManager();
-        final DisplayMetrics displayMetrics = new DisplayMetrics();
-        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+        if (checkDrawOverlayPermission(rootActivity)) {
+            hideDebugger(rootActivity);
 
-        final WindowManager.LayoutParams layoutParams
-                = prepareWindowManagerLayoutParams(rootActivity, displayMetrics);
+            final WindowManager windowManager = rootActivity.getWindowManager();
+            final DisplayMetrics displayMetrics = new DisplayMetrics();
+            windowManager.getDefaultDisplay().getMetrics(displayMetrics);
 
-        final DebuggerViewContainer debuggerViewContainer = createDebuggerView(rootActivity, mode,
-                layoutParams);
+            final WindowManager.LayoutParams layoutParams
+                    = prepareWindowManagerLayoutParams(rootActivity, displayMetrics, systemOverlay);
 
-        windowManager.addView(debuggerViewContainer.getView(), layoutParams);
+            final DebuggerViewContainer debuggerViewContainer = createDebuggerView(rootActivity, mode,
+                    layoutParams);
 
-        debuggerViewContainer.getView().setOnTouchListener(new DebuggerTouchHandler(windowManager,
-                layoutParams, debuggerViewContainer));
+            windowManager.addView(debuggerViewContainer.getView(), layoutParams);
 
-        debuggerViewContainerRef = new WeakReference<>(debuggerViewContainer);
+            debuggerViewContainer.getView().setOnTouchListener(new DebuggerTouchHandler(windowManager,
+                    layoutParams, debuggerViewContainer));
+
+            debuggerViewContainerRef = new WeakReference<>(debuggerViewContainer);
+        }
+    }
+
+    private boolean checkDrawOverlayPermission(Activity activity) {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (!Settings.canDrawOverlays(activity)) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:" + activity.getPackageName()));
+                activity.startActivityForResult(intent, 101);
+                Toast.makeText(activity, "Enable \"Draw over other apps\" in " +
+                                "Settings - Apps - Your app to use the debugger and restart the app",
+                        Toast.LENGTH_LONG).show();
+                return false;
+            } else {
+               return true;
+            }
+        } else {
+            return true;
+        }
     }
 
     private DebuggerViewContainer createDebuggerView(Activity rootActivity, DebuggerMode mode,
@@ -72,8 +102,27 @@ public class Debugger {
         }
     }
 
+    @SuppressWarnings("unused")
+    public void publishEvent(String id, Long timestamp, String name,
+                             List<Map<String, String>> messages,
+                             List<Map<String, String>> eventProps,
+                             List<Map<String, String>> userProps) {
+
+        DebuggerEventItem event = new DebuggerEventItem(id, timestamp, name,
+                messages, eventProps, userProps);
+
+        publishEvent(event);
+    }
+
+    @SuppressWarnings("unused")
+    public Boolean isEnabled() {
+        DebuggerViewContainer debuggerViewContainer = debuggerViewContainerRef.get();
+        return debuggerViewContainer != null;
+    }
+
     private WindowManager.LayoutParams prepareWindowManagerLayoutParams(Context context,
-                                                                        DisplayMetrics displayMetrics) {
+                                                                        DisplayMetrics displayMetrics,
+                                                                        boolean overlay) {
         int barHeight = 0;
         Resources resources = context.getResources();
         int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
@@ -81,8 +130,19 @@ public class Debugger {
             barHeight = resources.getDimensionPixelSize(resourceId);
         }
 
+        int LAYOUT_FLAG;
+        if (overlay) {
+            if (Build.VERSION.SDK_INT >= 26) {
+                LAYOUT_FLAG = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+            } else {
+                LAYOUT_FLAG = WindowManager.LayoutParams.TYPE_PHONE;
+            }
+        } else {
+            LAYOUT_FLAG = WindowManager.LayoutParams.TYPE_APPLICATION;
+        }
+
         final WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-        layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION;
+        layoutParams.type = LAYOUT_FLAG;
         layoutParams.format = PixelFormat.TRANSLUCENT;
         layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
         layoutParams.y = (displayMetrics.heightPixels - barHeight) / 2;
@@ -105,11 +165,12 @@ public class Debugger {
         return new BarViewContainer(rootActivity.getLayoutInflater());
     }
 
-    public void hideDebugger(Activity rootActivity) {
+    public void hideDebugger(Activity anyActivity) {
         DebuggerViewContainer debuggerViewContainer = debuggerViewContainerRef.get();
         if (debuggerViewContainer != null) {
             try {
-                rootActivity.getWindowManager().removeView(debuggerViewContainer.getView());
+                anyActivity.getWindowManager().removeView(debuggerViewContainer.getView());
+                debuggerViewContainerRef = new WeakReference<>(null);
             } catch (Throwable ignored) {}
         }
     }

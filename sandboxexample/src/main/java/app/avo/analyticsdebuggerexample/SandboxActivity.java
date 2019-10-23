@@ -1,7 +1,7 @@
 package app.avo.analyticsdebuggerexample;
 
 import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -9,65 +9,65 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-import app.avo.androidanalyticsdebugger.Debugger;
+import app.avo.androidanalyticsdebugger.DebuggerManager;
 import app.avo.androidanalyticsdebugger.DebuggerMode;
 import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
-import app.avo.androidanalyticsdebugger.model.DebuggerMessage;
 import app.avo.androidanalyticsdebugger.model.DebuggerProp;
+import app.avo.independent.Independent;
 
 public class SandboxActivity extends AppCompatActivity {
 
-    Debugger debugger;
+    DebuggerManager debuggerManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sandbox);
 
-        debugger = new Debugger();
-        debugger.showDebugger(this, DebuggerMode.bar);
+        debuggerManager = new DebuggerManager();
 
-        DebuggerEventItem event = new DebuggerEventItem("App open", "app open id",
-                System.currentTimeMillis(), "App open", new ArrayList<DebuggerMessage>(),
-                new ArrayList<DebuggerProp>(), new ArrayList<DebuggerProp>());
-        debugger.publishEvent(event);
+        Independent.setDebugger(debuggerManager);
+        Independent.sendEvent("app open id", System.currentTimeMillis(), "App open",
+                new ArrayList<Map<String, String>>(),
+                new ArrayList<Map<String, String>>(),
+                new ArrayList<Map<String, String>>());
 
         Button triggerErrorButton = findViewById(R.id.trigger_error_button);
 
         triggerErrorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (debugger != null) {
-                    DebuggerEventItem event = new DebuggerEventItem();
-                    event.id = "ew23fe";
-                    event.key = "Key";
-                    event.name = "Error event Error event Error event Error event Error event Error event";
-                    event.timestamp = System.currentTimeMillis();
-                    event.eventProps = new ArrayList<>();
+                if (debuggerManager != null) {
+                    ArrayList<Map<String, String>> eventProps = new ArrayList<>();
 
-                    event.eventProps.add(new DebuggerProp());
-                    event.eventProps.get(0).id = "event prop id";
-                    event.eventProps.get(0).name = "Post Type";
-                    event.eventProps.get(0).value = "gif";
+                    eventProps.add(new HashMap<String, String>() {{
+                        put("id", "event prop id");
+                        put("name", "Post Type");
+                        put("value", "gif");
+                    }});
+                    eventProps.add(new HashMap<String, String>() {{
+                        put("id", "good event id");
+                        put("name", "Comment Id");
+                        put("value", "sdfdf2");
+                    }});
 
-                    event.eventProps.add(new DebuggerProp());
-                    event.eventProps.get(1).id = "good event id";
-                    event.eventProps.get(1).name = "Comment Id";
-                    event.eventProps.get(1).value = "sdfdf2";
+                    ArrayList<Map<String, String>> messages = new ArrayList<>();
+                    messages.add(new HashMap<String, String>() {{
+                        put("tag", "tagValue");
+                        put("propertyId", "event prop id");
+                        put("message", "Post Type should match one of: GIF, Image, Video or Quote but you provided gif.");
+                        put("allowedTypes", "GIF,Image,Video,Quote");
+                        put("providedType", "gif");
+                    }});
 
-                    event.messages = new ArrayList<>();
-                    event.messages.add(new DebuggerMessage("tag", "event prop id",
-                            "Post Type should match one of: GIF, Image, Video or Quote but you provided gif.",
-                            new ArrayList<String>() {{
-                                add("GIF");
-                                add("Image");
-                                add("Video");
-                                add("Quote");
-                            }},
-                            "gif"));
-
-                    debugger.publishEvent(event);
+                    Independent.sendEvent("ew23fe",
+                            System.currentTimeMillis(),
+                            "Error event Error event Error event Error event Error event Error event",
+                            messages,
+                            eventProps, new ArrayList<Map<String, String>>());
                 }
             }
         });
@@ -77,10 +77,9 @@ public class SandboxActivity extends AppCompatActivity {
         triggerEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (debugger != null) {
+                if (debuggerManager != null) {
                     DebuggerEventItem event = new DebuggerEventItem();
                     event.id = "ef42ee";
-                    event.key = "Key";
                     event.name = "Something happened";
                     event.timestamp = System.currentTimeMillis();
                     event.userProps = new ArrayList<>();
@@ -100,7 +99,7 @@ public class SandboxActivity extends AppCompatActivity {
                     event.eventProps.get(0).name = "Comment Id";
                     event.eventProps.get(0).value = "sdfdf2";
 
-                    debugger.publishEvent(event);
+                    debuggerManager.publishEvent(event);
                 }
             }
         });
@@ -113,10 +112,9 @@ public class SandboxActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (debugger != null) {
+                        if (debuggerManager != null) {
                             DebuggerEventItem event = new DebuggerEventItem();
                             event.id = "ef42aee";
-                            event.key = "Key";
                             event.name = "Delayed";
                             event.timestamp = System.currentTimeMillis();
                             event.userProps = new ArrayList<>();
@@ -136,7 +134,7 @@ public class SandboxActivity extends AppCompatActivity {
                             event.eventProps.get(0).name = "Comment Id";
                             event.eventProps.get(0).value = "sdfdf2";
 
-                            debugger.publishEvent(event);
+                            debuggerManager.publishEvent(event);
 
                             Toast.makeText(SandboxActivity.this, "Event posted", Toast.LENGTH_SHORT).show();
                         }
@@ -144,5 +142,21 @@ public class SandboxActivity extends AppCompatActivity {
                 }, 5000);
             }
         });
+
+        Button openAnotherActivity = findViewById(R.id.open_another_activity);
+        openAnotherActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SandboxActivity.this, AnotherActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        debuggerManager.showDebugger(this, DebuggerMode.bar);
     }
 }

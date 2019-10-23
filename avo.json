@@ -1,0 +1,23 @@
+{
+  "avo": {
+    "version": 1
+  },
+  "schema": {
+    "id": "0cd8DLUxoxnhXaqRxL6O",
+    "name": "Analytics debugger example app"
+  },
+  "branch": {
+    "id": "master",
+    "name": "master"
+  },
+  "sources": [
+    {
+      "id": "YlFip7cPY",
+      "name": "java android",
+      "path": "musicplayerexample/src/main/java/sh/avo/Avo.java",
+      "actionId": "xsA6i5DKsF545AoEZpaH",
+      "branchId": "master",
+      "updatedAt": "2019-10-21T19:36:56.671Z"
+    }
+  ]
+}

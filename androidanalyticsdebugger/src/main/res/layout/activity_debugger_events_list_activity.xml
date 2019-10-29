@@ -33,7 +33,7 @@
         android:src="@drawable/close_button"
         android:contentDescription="@string/close_button_description" />
 
-    <androidx.recyclerview.widget.RecyclerView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/events_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

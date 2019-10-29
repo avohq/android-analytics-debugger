@@ -2,7 +2,7 @@ package app.avo.musicplayerexample
 
 import android.content.Context
 import android.media.MediaPlayer
-import androidx.annotation.RawRes
+import android.support.annotation.RawRes
 
 
 class Player {

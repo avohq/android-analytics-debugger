@@ -8,11 +8,10 @@ import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
+import android.support.v7.util.SortedList;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 import android.widget.Toast;
-
-import androidx.recyclerview.widget.SortedList;
 
 import java.lang.ref.WeakReference;
 import java.util.List;

@@ -1,8 +1,8 @@
 package app.avo.musicplayerexample
 
-import androidx.appcompat.app.AppCompatActivity
 
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.view.View
 import app.avo.androidanalyticsdebugger.DebuggerManager
 import app.avo.androidanalyticsdebugger.DebuggerMode

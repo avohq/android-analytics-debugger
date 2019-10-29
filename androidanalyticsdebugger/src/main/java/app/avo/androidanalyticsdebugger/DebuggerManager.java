@@ -58,6 +58,10 @@ public class DebuggerManager {
                     layoutParams, debuggerViewContainer));
 
             debuggerViewContainerRef = new WeakReference<>(debuggerViewContainer);
+
+            if (events.size() > 0) {
+                debuggerViewContainer.showEvent(events.get(events.size() - 1));
+            }
         }
     }
 

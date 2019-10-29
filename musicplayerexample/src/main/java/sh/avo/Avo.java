@@ -427,7 +427,7 @@ private static class AvoInvoke {
             final List<AvoAssertMessage> messages = new ArrayList<>();
             // debug console in Avo
             AvoInvoke.invoke("oZvpnm2MM", "69e1fdcb79d69ac99e813df3cc951f797327331ee8e368a794c5c12e7a371754", messages);
-            if (__MOBILE_DEBUGGER_ENABLED__()) {
+            if (__AVO_ENV__ != AvoEnv.PROD) {
                 // Avo mobile debugger
                 __MOBILE_DEBUGGER_POST_EVENT__("oZvpnm2MM", System.currentTimeMillis(), "App Opened", new ArrayList<Map<String, String>>() {{
                     for (final AvoAssertMessage message: messages) {

@@ -15,11 +15,19 @@ add the following to the root build.gradle:
     }
 ```
 
-and in your module build.gradle:
+and in your module build.gradle, if you are using androidx dependencies:
 
 ```
     dependencies {
-	      implementation 'com.github.avohq:android-analytics-debugger:x.x.x'
+        implementation 'com.github.avohq:android-analytics-debugger:x.x.x'
+    }
+```
+
+if you are using support dependencies:
+
+```
+    dependencies {
+        implementation 'com.github.avohq:android-analytics-debugger:x.x.x-support'
     }
 ```
 

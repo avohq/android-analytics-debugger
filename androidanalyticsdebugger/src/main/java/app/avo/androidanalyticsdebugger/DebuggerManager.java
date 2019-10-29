@@ -95,10 +95,11 @@ public class DebuggerManager {
 
         if (debuggerViewContainer != null) {
             debuggerViewContainer.showEvent(event);
-            events.add(event);
-            if (eventUpdateListener != null) {
-                eventUpdateListener.run();
-            }
+        }
+
+        events.add(event);
+        if (eventUpdateListener != null) {
+            eventUpdateListener.run();
         }
     }
 

@@ -18,13 +18,11 @@ class ExampleMusicPlayerActivity : AppCompatActivity() {
     private var timer: Timer? = null
 
     private val debuggerManager: DebuggerManager
-        get() = (application as MusciPlayerExampleApplication).debugger
+        get() = (application as MusicPlayerExampleApplication).debugger
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         debuggerManager.showDebugger(this, DebuggerMode.bar)
-
-        Avo.appOpened()
 
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()

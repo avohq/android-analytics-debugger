@@ -10,7 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name=".MusciPlayerExampleApplication"
+        android:name=".MusicPlayerExampleApplication"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".ExampleMusicPlayerActivity">
             <intent-filter>

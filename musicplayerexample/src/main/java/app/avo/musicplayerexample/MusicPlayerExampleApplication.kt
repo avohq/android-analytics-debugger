@@ -5,7 +5,7 @@ import android.app.Application
 import app.avo.androidanalyticsdebugger.DebuggerManager
 import sh.avo.Avo
 
-class MusciPlayerExampleApplication : Application() {
+class MusicPlayerExampleApplication : Application() {
 
     var debugger = DebuggerManager()
 
@@ -28,5 +28,6 @@ class MusciPlayerExampleApplication : Application() {
             override fun unidentify() {
             }
         }, null, debugger)
+        Avo.appOpened()
     }
 }

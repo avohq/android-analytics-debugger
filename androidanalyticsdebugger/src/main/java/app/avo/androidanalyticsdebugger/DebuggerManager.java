@@ -18,6 +18,7 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.Map;
 
+import app.avo.androidanalyticsdebugger.debuggereventslist.NewEventListener;
 import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 import app.avo.androidanalyticsdebugger.debuggerview.BarViewContainer;
 import app.avo.androidanalyticsdebugger.debuggerview.BubbleViewContainer;
@@ -27,7 +28,7 @@ public class DebuggerManager {
 
     public static SortedList<DebuggerEventItem> events = new SortedList<>(DebuggerEventItem.class,
             new EventsSorting());
-    public static Runnable eventUpdateListener = null;
+    public static NewEventListener eventUpdateListener = null;
 
     private static WeakReference<DebuggerViewContainer> debuggerViewContainerRef =
             new WeakReference<>(null);
@@ -103,7 +104,7 @@ public class DebuggerManager {
 
         events.add(event);
         if (eventUpdateListener != null) {
-            eventUpdateListener.run();
+            eventUpdateListener.onNewEvent(event);
         }
     }
 

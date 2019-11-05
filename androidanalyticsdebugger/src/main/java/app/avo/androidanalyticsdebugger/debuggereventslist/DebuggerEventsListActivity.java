@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import app.avo.androidanalyticsdebugger.DebuggerManager;
 import app.avo.androidanalyticsdebugger.R;
+import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 
 public class DebuggerEventsListActivity extends AppCompatActivity {
 
@@ -35,10 +36,10 @@ public class DebuggerEventsListActivity extends AppCompatActivity {
             }
         });
 
-        DebuggerManager.eventUpdateListener = new Runnable() {
+        DebuggerManager.eventUpdateListener = new NewEventListener() {
             @Override
-            public void run() {
-                adapter.notifyDataSetChanged();
+            public void onNewEvent(DebuggerEventItem item) {
+                adapter.onNewItem(item);
             }
         };
     }

@@ -29,6 +29,21 @@ import app.avo.androidanalyticsdebugger.model.DebuggerProp;
 
 public class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEventsListAdapter.DebuggerEventViewHolder> {
 
+    private List<DebuggerEventItem> expendedEvents = new ArrayList<>();
+
+    public DebuggerEventsListAdapter() {
+        if (DebuggerManager.events.size() > 0) {
+            expendedEvents.add(DebuggerManager.events.get(0));
+        }
+
+        for (int i = 0; i < DebuggerManager.events.size(); i++) {
+            DebuggerEventItem event = DebuggerManager.events.get(i);
+            if (Util.eventHaveErrors(event)) {
+                expendedEvents.add(event);
+            }
+        }
+    }
+
     @NonNull
     @Override
     public DebuggerEventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -41,16 +56,16 @@ public class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEven
 
         final DebuggerEventItem event = DebuggerManager.events.get(position);
         boolean hasError = Util.eventHaveErrors(event);
-        final boolean[] expended = {position == 0 || hasError};
+        final boolean expended = expendedEvents.contains(event);
 
         holder.eventName.setText(event.name);
         holder.timestamp.setText(Util.timeString(event.timestamp));
         holder.expendedContent.removeAllViews();
 
-        if (expended[0]) {
-            expendItem(holder, event);
+        if (expended) {
+            expendItem(holder, event, false);
         } else {
-            collapseItem(holder);
+            collapseItem(holder, false);
         }
 
         if (hasError) {
@@ -64,21 +79,12 @@ public class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEven
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                expended[0] = !expended[0];
-                if (expended[0]) {
-                    expendItem(holder, event);
-
-                    int matchParentMeasureSpec = View.MeasureSpec.makeMeasureSpec(((View) holder.expendedContent.getParent()).getWidth(), View.MeasureSpec.EXACTLY);
-                    int wrapContentMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-                    holder.expendedContent.measure(matchParentMeasureSpec, wrapContentMeasureSpec);
-                    final int targetHeight = holder.expendedContent.getMeasuredHeight();
-
-                    animateProps(holder, 0, targetHeight);
+                if (expendedEvents.contains(event)) {
+                    collapseItem(holder, true);
+                    expendedEvents.remove(event);
                 } else {
-                    collapseItem(holder);
-
-                    final int startHeight = holder.expendedContent.getHeight();
-                    animateProps(holder, startHeight, 0);
+                    expendItem(holder, event, true);
+                    expendedEvents.add(event);
                 }
             }
         });
@@ -99,16 +105,25 @@ public class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEven
         valueAnimator.start();
     }
 
-    private void collapseItem(@NonNull DebuggerEventViewHolder holder) {
+    private void collapseItem(@NonNull DebuggerEventViewHolder holder, boolean animated) {
         holder.expendedContent.removeAllViews();
         holder.expendButton.setImageResource(R.drawable.expend_arrow);
 
         Context context = holder.itemView.getContext();
         holder.expendedContent.setPadding(0, 0, 0,
                 (int) Util.convertDpToPixel(0, context));
+
+        if (animated) {
+            final int startHeight = holder.expendedContent.getHeight();
+            animateProps(holder, startHeight, 0);
+        } else {
+            holder.expendedContent.getLayoutParams().height = 0;
+            holder.expendedContent.requestLayout();
+        }
     }
 
-    private void expendItem(@NonNull final DebuggerEventViewHolder holder, DebuggerEventItem event) {
+    private void expendItem(@NonNull final DebuggerEventViewHolder holder, DebuggerEventItem event,
+                            boolean animated) {
         holder.expendButton.setImageResource(R.drawable.collapse_arrow);
         Context context = holder.itemView.getContext();
         LayoutInflater layoutInflater = LayoutInflater.from(context);
@@ -122,6 +137,18 @@ public class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEven
 
         holder.expendedContent.setPadding(0, 0, 0,
                 (int) Util.convertDpToPixel(16, context));
+
+        if (animated) {
+            int matchParentMeasureSpec = View.MeasureSpec.makeMeasureSpec(((View) holder.expendedContent.getParent()).getWidth(), View.MeasureSpec.EXACTLY);
+            int wrapContentMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+            holder.expendedContent.measure(matchParentMeasureSpec, wrapContentMeasureSpec);
+            final int targetHeight = holder.expendedContent.getMeasuredHeight();
+
+            animateProps(holder, 0, targetHeight);
+        } else {
+            holder.expendedContent.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            holder.expendedContent.requestLayout();
+        }
     }
 
     private void addPropRows(@NonNull DebuggerEventViewHolder holder, DebuggerEventItem event,
@@ -200,6 +227,11 @@ public class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEven
     @Override
     public int getItemCount() {
         return DebuggerManager.events.size();
+    }
+
+    public void onNewItem(DebuggerEventItem event) {
+        expendedEvents.add(event);
+        notifyDataSetChanged();
     }
 
     static class DebuggerEventViewHolder extends RecyclerView.ViewHolder {

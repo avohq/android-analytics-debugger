@@ -27,7 +27,7 @@ class MusicPlayerExampleApplication : Application() {
 
             override fun unidentify() {
             }
-        }, null, debugger)
+        }, debugger)
         Avo.appOpened()
     }
 }

@@ -193,7 +193,8 @@ public class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEven
     }
 
     private CharSequence boldifyErrorMessage(String propertyName, String message,
-                                             List<String> allowedTypes, String providedType) {
+                                             List<String> allowedTypes,
+                                             @Nullable String providedType) {
         if (allowedTypes == null || allowedTypes.isEmpty()
                 || providedType == null || providedType.isEmpty()) {
             return message;

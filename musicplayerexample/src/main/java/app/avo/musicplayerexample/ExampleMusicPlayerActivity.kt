@@ -22,8 +22,6 @@ class ExampleMusicPlayerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        debuggerManager.showDebugger(this, DebuggerMode.bar)
-
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
         setContentView(R.layout.activity_music_player)

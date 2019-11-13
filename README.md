@@ -35,18 +35,34 @@ Use the latest github release tag to get the latest version of the library.
 
 ## Create the debugger manager instance
 
+Java
 ```
     DebuggerManager debuggerManager = new DebuggerManager();
 ```
 
+Kotlin
+```
+    val debuggerManager = DebuggerManager()
+```
+
 ## Show the debugger
 
+Java
 ```
     @Override
     protected void onStart() {
         super.onStart();
 
         debuggerManager.showDebugger(this, DebuggerMode.bar); // Can also be DebuggerMode.bubble
+    }
+```
+
+Kotlin
+```
+    override fun onStart() {
+        super.onStart()
+
+        debuggerManager.showDebugger(this, DebuggerMode.bar) // Can also be DebuggerMode.bubble
     }
 ```
     
@@ -56,6 +72,23 @@ If your app uses multiple activities:
 - Option 2: use `showDebugger(this, DebuggerMode.bar, true)` method. The debugger view will become a system-wide overlay. Might be useful if you want to see events while your app is in background. In this case you'll need to enable "Draw over other apps" in Settings - Apps - Your app.
     
 # Using with Avo
+Java
+```
+    public class MusciPlayerExampleApplication extends Application {
+
+        DebuggerManager debuggerManager = new DebuggerManager();
+
+        @Override
+        public void onCreate() {
+            super.onCreate();
+
+            Avo.initAvo(Avo.AvoEnv.DEV, debuggerManager);
+            Avo.appOpened();
+        }
+    }
+````
+
+Kotlin
 ```
     class MusciPlayerExampleApplication : Application() {
 

@@ -1,5 +1,7 @@
 package app.avo.androidanalyticsdebugger.debuggerview;
 
+import android.annotation.SuppressLint;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,6 +21,7 @@ public class BarViewContainer implements DebuggerViewContainer {
     private ImageView successIcon;
     private ImageView dragHandle;
 
+    @SuppressLint("InflateParams")
     public BarViewContainer(LayoutInflater layoutInflater) {
         view = layoutInflater.inflate(R.layout.bar_view, null);
 
@@ -43,14 +46,30 @@ public class BarViewContainer implements DebuggerViewContainer {
             successIcon.setImageResource(R.drawable.warning);
             dragHandle.setImageResource(R.drawable.drag_handle_white);
             view.setBackgroundResource(R.color.error);
-            timestamp.setTextColor(view.getResources().getColor(R.color.foregroundLighter));
-            eventName.setTextColor(view.getResources().getColor(R.color.background));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                timestamp.setTextColor(view.getResources().getColor(R.color.foregroundLighter, null));
+            } else {
+                timestamp.setTextColor(view.getResources().getColor(R.color.foregroundLighter));
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                eventName.setTextColor(view.getResources().getColor(R.color.background, null));
+            } else {
+                eventName.setTextColor(view.getResources().getColor(R.color.background));
+            }
         } else {
             successIcon.setImageResource(R.drawable.tick);
             dragHandle.setImageResource(R.drawable.drag_handle_grey);
             view.setBackgroundResource(R.color.background);
-            timestamp.setTextColor(view.getResources().getColor(R.color.foregroundLight));
-            eventName.setTextColor(view.getResources().getColor(R.color.foreground));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                timestamp.setTextColor(view.getResources().getColor(R.color.foregroundLight, null));
+            } else {
+                timestamp.setTextColor(view.getResources().getColor(R.color.foregroundLight));
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                eventName.setTextColor(view.getResources().getColor(R.color.foreground, null));
+            } else {
+                eventName.setTextColor(view.getResources().getColor(R.color.foreground));
+            }
         }
     }
 

@@ -1,5 +1,8 @@
 package app.avo.androidanalyticsdebugger.debuggerview;
 
+import android.annotation.SuppressLint;
+import android.content.res.Resources;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,6 +23,7 @@ public class BubbleViewContainer implements DebuggerViewContainer {
 
     private int countedEvents = 0;
 
+    @SuppressLint("InflateParams")
     public BubbleViewContainer(LayoutInflater layoutInflater) {
         this.view = layoutInflater.inflate(R.layout.bubble_view, null);
 
@@ -43,11 +47,19 @@ public class BubbleViewContainer implements DebuggerViewContainer {
         if (hasError) {
             bubble.setImageResource(R.drawable.avo_bubble_error);
             counter.setBackgroundResource(R.drawable.white_oval);
-            counter.setTextColor(view.getResources().getColor(R.color.error));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                counter.setTextColor(view.getResources().getColor(R.color.error, null));
+            } else {
+                counter.setTextColor(view.getResources().getColor(R.color.error));
+            }
         } else {
             bubble.setImageResource(R.drawable.avo_bubble);
             counter.setBackgroundResource(R.drawable.green_oval);
-            counter.setTextColor(view.getResources().getColor(R.color.background));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                counter.setTextColor(view.getResources().getColor(R.color.background, null));
+            } else {
+                counter.setTextColor(view.getResources().getColor(R.color.background));
+            }
         }
     }
 

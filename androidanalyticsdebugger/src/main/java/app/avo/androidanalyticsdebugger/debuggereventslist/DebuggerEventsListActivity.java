@@ -15,6 +15,8 @@ import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 
 public class DebuggerEventsListActivity extends AppCompatActivity {
 
+    public DebuggerEventsListAdapter adapter;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +26,7 @@ public class DebuggerEventsListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_debugger_events_list_activity);
 
         final RecyclerView recycler = findViewById(R.id.events_list);
-        final DebuggerEventsListAdapter adapter = new DebuggerEventsListAdapter();
+        adapter = new DebuggerEventsListAdapter();
         recycler.setAdapter(adapter);
         recycler.setLayoutManager(new LinearLayoutManager(this));
 

@@ -17,7 +17,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 
 
-class DebuggerManagerEventsTest {
+class DebuggerManagerTest {
 
     private var debuggerManager = DebuggerManager()
 
@@ -166,5 +166,36 @@ class DebuggerManagerEventsTest {
 
         // Then
         verify(counter).text = "10"
+    }
+
+    @Test
+    fun showsBarDebuggerWithLastEvent() {
+        // Given
+        // Mocks setup
+        val timestamp = mock<TextView>()
+        val eventName = mock<TextView>()
+        val bubbleViewLayoutInflater = barDebuggerLayoutInflater(mock(), mock(), mock(), timestamp,
+                eventName)
+        val res = mock<Resources>()
+        val mockWindowManager = mock<WindowManager>()
+        val mockActivity = mock<Activity>()
+        whenever(mockActivity.windowManager).thenReturn(mockWindowManager)
+        whenever(mockActivity.resources).thenReturn(res)
+        whenever(mockActivity.layoutInflater).thenReturn(bubbleViewLayoutInflater)
+
+        // A number of events is sent before the debugger is shown
+        for (i in (0..10L)) {
+            DebuggerManager.events.add(createBasicEvent(i))
+        }
+        val lastEvent = DebuggerEventItem("id", System.currentTimeMillis(), "last event name",
+                null, null, null)
+        DebuggerManager.events.add(lastEvent)
+
+        // When
+        debuggerManager.showDebugger(mockActivity, DebuggerMode.bar)
+
+        // Then
+        verify(timestamp).text = Util.timeString(lastEvent.timestamp)
+        verify(eventName).text = lastEvent.name
     }
 }

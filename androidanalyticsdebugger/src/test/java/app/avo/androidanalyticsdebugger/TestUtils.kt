@@ -56,3 +56,8 @@ fun createBasicEvent(timestamp: Long = 1): DebuggerEventItem {
     return DebuggerEventItem("id", timestamp, "name",
             null, null, null)
 }
+
+fun createErrorEvent(timestamp: Long = 1): DebuggerEventItem {
+    return DebuggerEventItem("id", timestamp, "name",
+            listOf(mapOf(Pair("tag", "tag"), Pair("propertyId", "prop"), Pair("message", "mes"))), null, null)
+}

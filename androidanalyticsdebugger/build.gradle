@@ -27,6 +27,12 @@ android {
         }
     }
 
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+            returnDefaultValues = true
+        }
+    }
 }
 
 dependencies {
@@ -42,6 +48,9 @@ dependencies {
     testImplementation "androidx.core:core-ktx:1.1.0"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     testImplementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    testImplementation 'org.robolectric:robolectric:4.3'
+    testImplementation 'androidx.test:core:1.2.0'
+    testImplementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0"
 }
 repositories {
     mavenCentral()

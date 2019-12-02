@@ -43,7 +43,7 @@ class ExampleMusicPlayerLogic {
         return musicStorage.trackName(currentTrackPosition + 1)
     }
 
-    fun trackName(): String {
+    fun currentTrackName(): String {
         return musicStorage.trackName(currentTrackPosition)
     }
 

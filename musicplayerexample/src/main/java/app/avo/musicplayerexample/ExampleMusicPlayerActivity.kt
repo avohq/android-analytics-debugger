@@ -60,30 +60,36 @@ class ExampleMusicPlayerActivity : AppCompatActivity() {
     }
 
     private fun onPrevTrackClick() {
-        if (logic.loadPrevTrack(applicationContext)) {
-            Avo.playPreviousTrack(logic.nextTrackName(), logic.trackName())
+        val currentTrackBeforeSwitching = logic.currentTrackName()
+        val upcomingTrackBeforeSwitching = logic.prevTrackName()
 
+        if (logic.loadPrevTrack(applicationContext)) {
             showCurrentTrack()
             manageNavigationButtonsVisibilityOnPrev()
+
+            Avo.playPreviousTrack(currentTrackBeforeSwitching, upcomingTrackBeforeSwitching)
         }
     }
 
     private fun onNextTrackClick() {
-        if (logic.loadNextTrack(applicationContext)) {
-            Avo.playNextTrack(logic.prevTrackName(), logic.trackName())
+        val currentTrackBeforeSwitching = logic.currentTrackName()
+        val upcomingTrackBeforeSwitching = logic.nextTrackName()
 
+        if (logic.loadNextTrack(applicationContext)) {
             showCurrentTrack()
             manageNavigationButtonsVisibilityOnNext()
+
+            Avo.playNextTrack(currentTrackBeforeSwitching, upcomingTrackBeforeSwitching)
         }
     }
 
     private fun onPlayPauseClick() {
         if (!logic.player.isPlaying()) {
             play()
-            Avo.play(logic.trackName())
+            Avo.play(logic.currentTrackName())
         } else {
             pause()
-            Avo.pause(logic.trackName())
+            Avo.pause(logic.currentTrackName())
         }
     }
 
@@ -131,7 +137,7 @@ class ExampleMusicPlayerActivity : AppCompatActivity() {
     private fun showCurrentTrack() {
         play_pause.text = getString(R.string.play_label)
 
-        track_name.text = logic.trackName()
+        track_name.text = logic.currentTrackName()
 
         showTrackTime()
     }

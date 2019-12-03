@@ -385,9 +385,9 @@ interface Avo {
                 AvoInvoke.invoke("oZvpnm2MM", "e60cf562c83dd6e3d56d30c4de3193c2fc896868e2ba853b7b79edc23d66b110", messages)
                 if (__ENV__ != AvoEnv.PROD && __MOBILE_DEBUGGER__ != null || __ENV__ == AvoEnv.PROD && __MOBILE_DEBUGGER_ENABLED__()) {
                     // Avo mobile debugger
-                    val eventProps: List<Map<String, String>> = listOf()
-                    val userProps: List<Map<String, String>> = listOf()
-                    __MOBILE_DEBUGGER_POST_EVENT__("oZvpnm2MM", "App Opened", eventProperties = eventProps, userProperties = userProps, 
+                    val event_props: List<Map<String, String>> = listOf()
+                    val user_props: List<Map<String, String>> = listOf()
+                    __MOBILE_DEBUGGER_POST_EVENT__("oZvpnm2MM", "App Opened", eventProperties = event_props, userProperties = user_props, 
                             messages = messages.map {
                                 mapOf("tag" to it.javaClass.simpleName, "propertyId" to it.propertyId,
                                         "message" to it.message)
@@ -422,10 +422,10 @@ interface Avo {
                 AvoInvoke.invoke("6p9dLEHQVr", "7530f4d2c8ec5c0258ba79091af59205b15522159fb3339ce9792c7f242f84c8", messages)
                 if (__ENV__ != AvoEnv.PROD && __MOBILE_DEBUGGER__ != null || __ENV__ == AvoEnv.PROD && __MOBILE_DEBUGGER_ENABLED__()) {
                     // Avo mobile debugger
-                    val eventProps: List<Map<String, String>> = listOf(
+                    val event_props: List<Map<String, String>> = listOf(
                       mapOf("id" to "kwANmf381A", "name" to "Current Song Name", "value" to (currentSongName.toString())))
-                    val userProps: List<Map<String, String>> = listOf()
-                    __MOBILE_DEBUGGER_POST_EVENT__("6p9dLEHQVr", "Play", eventProperties = eventProps, userProperties = userProps, 
+                    val user_props: List<Map<String, String>> = listOf()
+                    __MOBILE_DEBUGGER_POST_EVENT__("6p9dLEHQVr", "Play", eventProperties = event_props, userProperties = user_props, 
                             messages = messages.map {
                                 mapOf("tag" to it.javaClass.simpleName, "propertyId" to it.propertyId,
                                         "message" to it.message)
@@ -464,10 +464,10 @@ interface Avo {
                 AvoInvoke.invoke("Ei7HeAerpy", "56e604e18496894cf278be342b5b440f2057259a7dc348c7c14050a4cbb52c71", messages)
                 if (__ENV__ != AvoEnv.PROD && __MOBILE_DEBUGGER__ != null || __ENV__ == AvoEnv.PROD && __MOBILE_DEBUGGER_ENABLED__()) {
                     // Avo mobile debugger
-                    val eventProps: List<Map<String, String>> = listOf(
+                    val event_props: List<Map<String, String>> = listOf(
                       mapOf("id" to "kwANmf381A", "name" to "Current Song Name", "value" to (currentSongName.toString())))
-                    val userProps: List<Map<String, String>> = listOf()
-                    __MOBILE_DEBUGGER_POST_EVENT__("Ei7HeAerpy", "Pause", eventProperties = eventProps, userProperties = userProps, 
+                    val user_props: List<Map<String, String>> = listOf()
+                    __MOBILE_DEBUGGER_POST_EVENT__("Ei7HeAerpy", "Pause", eventProperties = event_props, userProperties = user_props, 
                             messages = messages.map {
                                 mapOf("tag" to it.javaClass.simpleName, "propertyId" to it.propertyId,
                                         "message" to it.message)
@@ -510,11 +510,11 @@ interface Avo {
                 AvoInvoke.invoke("rQvcOWggzs", "efcd87917a305c400c4d1ffa62a608914016478a7381b959068773a1bd009334", messages)
                 if (__ENV__ != AvoEnv.PROD && __MOBILE_DEBUGGER__ != null || __ENV__ == AvoEnv.PROD && __MOBILE_DEBUGGER_ENABLED__()) {
                     // Avo mobile debugger
-                    val eventProps: List<Map<String, String>> = listOf(
+                    val event_props: List<Map<String, String>> = listOf(
                       mapOf("id" to "kwANmf381A", "name" to "Current Song Name", "value" to (currentSongName.toString())), 
                       mapOf("id" to "Lvi0sAE1Am", "name" to "Upcoming Track Name", "value" to (upcomingTrackName.toString())))
-                    val userProps: List<Map<String, String>> = listOf()
-                    __MOBILE_DEBUGGER_POST_EVENT__("rQvcOWggzs", "Play Next Track", eventProperties = eventProps, userProperties = userProps, 
+                    val user_props: List<Map<String, String>> = listOf()
+                    __MOBILE_DEBUGGER_POST_EVENT__("rQvcOWggzs", "Play Next Track", eventProperties = event_props, userProperties = user_props, 
                             messages = messages.map {
                                 mapOf("tag" to it.javaClass.simpleName, "propertyId" to it.propertyId,
                                         "message" to it.message)
@@ -559,11 +559,11 @@ interface Avo {
                 AvoInvoke.invoke("xBjjLugyOM", "bbe3fe829f6e51dc4ab3b85bece5b765576bb6505395d8cf1e63456d8d9e11a8", messages)
                 if (__ENV__ != AvoEnv.PROD && __MOBILE_DEBUGGER__ != null || __ENV__ == AvoEnv.PROD && __MOBILE_DEBUGGER_ENABLED__()) {
                     // Avo mobile debugger
-                    val eventProps: List<Map<String, String>> = listOf(
+                    val event_props: List<Map<String, String>> = listOf(
                       mapOf("id" to "kwANmf381A", "name" to "Current Song Name", "value" to (currentSongName.toString())), 
                       mapOf("id" to "Lvi0sAE1Am", "name" to "Upcoming Track Name", "value" to (upcomingTrackName.toString())))
-                    val userProps: List<Map<String, String>> = listOf()
-                    __MOBILE_DEBUGGER_POST_EVENT__("xBjjLugyOM", "Play Previous Track", eventProperties = eventProps, userProperties = userProps, 
+                    val user_props: List<Map<String, String>> = listOf()
+                    __MOBILE_DEBUGGER_POST_EVENT__("xBjjLugyOM", "Play Previous Track", eventProperties = event_props, userProperties = user_props, 
                             messages = messages.map {
                                 mapOf("tag" to it.javaClass.simpleName, "propertyId" to it.propertyId,
                                         "message" to it.message)

@@ -192,7 +192,8 @@ public class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEven
     }
 
     private CharSequence boldifyErrorMessage(String propertyName, String message,
-                                             List<String> allowedTypes, String providedType) {
+                                             @Nullable List<String> allowedTypes,
+                                             @Nullable String providedType) {
         if (allowedTypes == null || allowedTypes.isEmpty()
                 || providedType == null || providedType.isEmpty()) {
             return message;
@@ -233,14 +234,18 @@ public class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEven
         notifyDataSetChanged();
     }
 
-    static class DebuggerEventViewHolder extends RecyclerView.ViewHolder {
-        TextView eventName;
-        LinearLayout expendedContent;
-        ImageView expendButton;
-        ImageView successIcon;
-        TextView timestamp;
+    public List<DebuggerEventItem> getExpendedEvents() {
+        return expendedEvents;
+    }
 
-        DebuggerEventViewHolder(@NonNull View itemView) {
+    public static class DebuggerEventViewHolder extends RecyclerView.ViewHolder {
+        public TextView eventName;
+        public LinearLayout expendedContent;
+        public ImageView expendButton;
+        public ImageView successIcon;
+        public TextView timestamp;
+
+        public DebuggerEventViewHolder(@NonNull View itemView) {
             super(itemView);
 
             eventName = itemView.findViewById(R.id.event_name);

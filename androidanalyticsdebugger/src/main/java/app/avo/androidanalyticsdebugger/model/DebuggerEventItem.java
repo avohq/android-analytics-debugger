@@ -23,28 +23,35 @@ public class DebuggerEventItem {
         this.id = id;
         this.timestamp = timestamp;
         this.name = name;
-        this.messages = new ArrayList<>();
-        for (Map<String, String> message: messages) {
-            DebuggerMessage debuggerMessage = createMessage(message);
 
-            if (debuggerMessage != null) {
-                this.messages.add(debuggerMessage);
+        this.messages = new ArrayList<>();
+        if (messages != null) {
+            for (Map<String, String> message : messages) {
+                DebuggerMessage debuggerMessage = createMessage(message);
+
+                if (debuggerMessage != null) {
+                    this.messages.add(debuggerMessage);
+                }
             }
         }
 
         this.eventProps = new ArrayList<>();
-        for (Map<String, String> eventProp: eventProps) {
-            DebuggerProp prop = createProp(eventProp);
-            if (prop != null) {
-                this.eventProps.add(prop);
+        if (eventProps != null) {
+            for (Map<String, String> eventProp : eventProps) {
+                DebuggerProp prop = createProp(eventProp);
+                if (prop != null) {
+                    this.eventProps.add(prop);
+                }
             }
         }
 
         this.userProps = new ArrayList<>();
-        for (Map<String, String> userProp: userProps) {
-            DebuggerProp prop = createProp(userProp);
-            if (prop != null) {
-                this.userProps.add(prop);
+        if (userProps != null) {
+            for (Map<String, String> userProp : userProps) {
+                DebuggerProp prop = createProp(userProp);
+                if (prop != null) {
+                    this.userProps.add(prop);
+                }
             }
         }
     }

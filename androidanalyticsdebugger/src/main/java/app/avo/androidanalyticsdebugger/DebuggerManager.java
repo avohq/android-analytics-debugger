@@ -10,6 +10,7 @@ import android.os.Build;
 import android.provider.Settings;
 import android.support.v7.util.SortedList;
 import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -29,7 +30,7 @@ public class DebuggerManager {
             new EventsSorting());
     public static NewEventListener eventUpdateListener = null;
 
-    private static WeakReference<DebuggerViewContainer> debuggerViewContainerRef =
+    static WeakReference<DebuggerViewContainer> debuggerViewContainerRef =
             new WeakReference<>(null);
 
     public void showDebugger(final Activity rootActivity, DebuggerMode mode) {
@@ -44,7 +45,10 @@ public class DebuggerManager {
 
             final WindowManager windowManager = rootActivity.getWindowManager();
             final DisplayMetrics displayMetrics = new DisplayMetrics();
-            windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+            final Display display = windowManager.getDefaultDisplay();
+            if (display != null) {
+                windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+            }
 
             final WindowManager.LayoutParams layoutParams
                     = prepareWindowManagerLayoutParams(rootActivity, displayMetrics, systemOverlay);
@@ -59,8 +63,9 @@ public class DebuggerManager {
 
             debuggerViewContainerRef = new WeakReference<>(debuggerViewContainer);
 
-            if (events.size() > 0) {
-                debuggerViewContainer.showEvent(events.get(events.size() - 1));
+            for (int i = events.size() - 1; i >= 0 ; i--) {
+                DebuggerEventItem event = events.get(i);
+                debuggerViewContainer.showEvent(event);
             }
         }
     }

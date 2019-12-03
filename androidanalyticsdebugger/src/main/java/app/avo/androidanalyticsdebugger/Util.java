@@ -40,6 +40,9 @@ public class Util {
     }
 
     public static float convertDpToPixel(float dp, Context context) {
+        if (context == null) {
+            return 0;
+        }
         return dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 }

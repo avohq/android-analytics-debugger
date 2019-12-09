@@ -425,7 +425,7 @@ private static class AvoInvoke {
         return messages;
     }
 
-    *//**
+    *//*
      * App Opened: No description
      *
      * @see <a href="https://www.avo.app/schemas/0cd8DLUxoxnhXaqRxL6O/events/oZvpnm2MM">App Opened</a>
@@ -468,7 +468,7 @@ private static class AvoInvoke {
         custom.logEvent("App Opened", customEventProperties);
     }
 
-    *//**
+    *//*
      * Play: Sent when the user plays a track.
      *
      * @param currentSongName The name of the song that's currently playing.
@@ -535,7 +535,7 @@ private static class AvoInvoke {
         custom.logEvent("Play", customEventProperties);
     }
 
-    *//**
+    *//*
      * Pause: Sent when the user pauses a track.
      *
      * @param currentSongName The name of the song that's currently playing.
@@ -602,7 +602,7 @@ private static class AvoInvoke {
         custom.logEvent("Pause", customEventProperties);
     }
 
-    *//**
+    *//*
      * Play Next Track: Sent when the user plays next track.
      *
      * @param currentSongName The name of the song that's currently playing.
@@ -683,7 +683,7 @@ private static class AvoInvoke {
         custom.logEvent("Play Next Track", customEventProperties);
     }
 
-    *//**
+    *//*
      * Play Previous Track: Sent when the user plays previous track.
      *
      * @param currentSongName The name of the song that's currently playing.

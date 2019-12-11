@@ -3,9 +3,8 @@ package app.avo.musicplayerexample
 import android.app.Application
 
 import app.avo.androidanalyticsdebugger.DebuggerManager
-import sh.avo.Avo
-import sh.avo.AvoEnv
-import sh.avo.ICustomDestination
+import sh.avo.*
+import timber.log.Timber
 
 class MusicPlayerExampleApplication : Application() {
 
@@ -31,6 +30,13 @@ class MusicPlayerExampleApplication : Application() {
                     override fun unidentify() {
                     }
             }, debugger)
+
+        Avo.__LOGGER__ = object: AvoLogger {
+            override fun logEventSent(message: String) {
+                Timber.d(message)
+            }
+        }
+
         Avo.appOpened()
     }
 }

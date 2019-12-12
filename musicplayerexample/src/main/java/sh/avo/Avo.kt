@@ -322,11 +322,9 @@ interface Avo {
     companion object : Avo {
         var __STRICT__: Boolean = true
         lateinit var __ENV__: AvoEnv
-        var __LOGGER__ = object: AvoLogger {
-          @SuppressLint("LogNotTimber")
-          override fun logEventSent(message: String) {
-            Log.d("AvoLogger", message)
-          }
+        @SuppressLint("LogNotTimber")
+        var __LOGGER__: (String) -> Unit = { message ->
+          Log.d("AvoLogger", message)
         }
         
         lateinit var custom: ICustomDestination
@@ -402,7 +400,7 @@ interface Avo {
                 val avoLogEventProperties = emptyMap<String, Any>()
                 val avoLogUserProperties = emptyMap<String, Any>()
                 val logMessage = "[avo] Event Sent: App Opened Event Props: $avoLogEventProperties User Props: $avoLogUserProperties"
-                __LOGGER__.logEventSent(logMessage)
+                __LOGGER__.invoke(logMessage)
             }
             
             // destination custom
@@ -443,7 +441,7 @@ interface Avo {
                 )
                 val avoLogUserProperties = emptyMap<String, Any>()
                 val logMessage = "[avo] Event Sent: Play Event Props: $avoLogEventProperties User Props: $avoLogUserProperties"
-                __LOGGER__.logEventSent(logMessage)
+                __LOGGER__.invoke(logMessage)
             }
             
             // destination custom
@@ -486,7 +484,7 @@ interface Avo {
                 )
                 val avoLogUserProperties = emptyMap<String, Any>()
                 val logMessage = "[avo] Event Sent: Pause Event Props: $avoLogEventProperties User Props: $avoLogUserProperties"
-                __LOGGER__.logEventSent(logMessage)
+                __LOGGER__.invoke(logMessage)
             }
             
             // destination custom
@@ -535,7 +533,7 @@ interface Avo {
                 )
                 val avoLogUserProperties = emptyMap<String, Any>()
                 val logMessage = "[avo] Event Sent: Play Next Track Event Props: $avoLogEventProperties User Props: $avoLogUserProperties"
-                __LOGGER__.logEventSent(logMessage)
+                __LOGGER__.invoke(logMessage)
             }
             
             // destination custom
@@ -585,7 +583,7 @@ interface Avo {
                 )
                 val avoLogUserProperties = emptyMap<String, Any>()
                 val logMessage = "[avo] Event Sent: Play Previous Track Event Props: $avoLogEventProperties User Props: $avoLogUserProperties"
-                __LOGGER__.logEventSent(logMessage)
+                __LOGGER__.invoke(logMessage)
             }
             
             // destination custom

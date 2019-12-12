@@ -31,10 +31,8 @@ class MusicPlayerExampleApplication : Application() {
                     }
             }, debugger)
 
-        Avo.__LOGGER__ = object: AvoLogger {
-            override fun logEventSent(message: String) {
-                Timber.d(message)
-            }
+        Avo.__LOGGER__ = { message: String ->
+            Timber.d(message)
         }
 
         Avo.appOpened()

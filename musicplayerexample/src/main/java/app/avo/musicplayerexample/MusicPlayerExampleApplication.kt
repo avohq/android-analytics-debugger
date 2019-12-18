@@ -31,9 +31,9 @@ class MusicPlayerExampleApplication : Application() {
                     }
             }, debugger)
 
-        Avo.__LOGGER__ = { message: String ->
+        Avo.setAvoLogger({ message: String ->
             Timber.d(message)
-        }
+        })
 
         Avo.appOpened()
     }

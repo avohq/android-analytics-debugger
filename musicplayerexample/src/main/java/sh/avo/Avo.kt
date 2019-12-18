@@ -323,8 +323,12 @@ interface Avo {
         var __STRICT__: Boolean = true
         lateinit var __ENV__: AvoEnv
         @SuppressLint("LogNotTimber")
-        var __LOGGER__: (String) -> Unit = { message ->
+        private var __LOGGER__: (String) -> Unit = { message ->
           Log.d("AvoLogger", message)
+        }
+        
+        fun setAvoLogger(logger: (String) -> Unit) {
+            __LOGGER__ = logger
         }
         
         lateinit var custom: ICustomDestination

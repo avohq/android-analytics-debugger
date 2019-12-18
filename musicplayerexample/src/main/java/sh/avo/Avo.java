@@ -512,7 +512,7 @@ private static class AvoInvoke {
                 }
             }
         }
-
+w
         if (__AVO_ENV__ != AvoEnv.PROD) {
             final Map<String, Object> avoLogEventProperties = new HashMap<>();
             if (currentSongName != null) {

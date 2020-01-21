@@ -183,7 +183,7 @@ private object AvoInvoke {
         if (samplingRate > 0) {
             if (Math.random() < samplingRate) {
                 val json = JSONObject()
-                json.put("ac", "iYKGBP9w5gx134QFkuYi")
+                json.put("ac", "6O01KzNeYfhvAG46Fhs9")
                 json.put("br", "master")
                 json.put("en", "dev")
                 json.put("ev", eventId)
@@ -221,7 +221,7 @@ private object AvoInvoke {
         if (samplingRate > 0) {
             if (Math.random() < samplingRate) {
                 val json = JSONObject()
-                json.put("ac", "iYKGBP9w5gx134QFkuYi")
+                json.put("ac", "6O01KzNeYfhvAG46Fhs9")
                 json.put("br", "master")
                 json.put("en", "dev")
                 json.put("ty", type)

@@ -1,8 +1,10 @@
 package app.avo.androidanalyticsdebugger;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.PixelFormat;
 import android.net.Uri;
@@ -13,11 +15,20 @@ import android.view.Display;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.SortedList;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.ref.WeakReference;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import app.avo.androidanalyticsdebugger.debuggereventslist.NewEventListener;
 import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
@@ -26,6 +37,8 @@ import app.avo.androidanalyticsdebugger.debuggerview.BubbleViewContainer;
 import app.avo.androidanalyticsdebugger.debuggerview.DebuggerViewContainer;
 
 public class DebuggerManager {
+
+    public @Nullable String schemaId = null;
 
     public static SortedList<DebuggerEventItem> events = new SortedList<>(DebuggerEventItem.class,
             new EventsSorting());
@@ -36,6 +49,10 @@ public class DebuggerManager {
 
     public void showDebugger(final Activity rootActivity, DebuggerMode mode) {
         showDebugger(rootActivity, mode, false);
+    }
+
+    public void setSchemaId(String schemaId) {
+        this.schemaId = schemaId;
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -68,7 +85,86 @@ public class DebuggerManager {
                 DebuggerEventItem event = events.get(i);
                 debuggerViewContainer.showEvent(event);
             }
+
+            trackDebuggerStarted(rootActivity.getApplication());
         }
+    }
+
+    private void trackDebuggerStarted(final Context context) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL apiUrl = new URL("https://api.avo.app/c/v1/track");
+
+                    JSONObject body = buildRequestBody(context);
+
+                    HttpsURLConnection connection = null;
+                    try {
+                        connection = (HttpsURLConnection) apiUrl.openConnection();
+
+                        connection.setRequestMethod("POST");
+                        connection.setDoInput(true);
+
+                        writeTrackingCallHeader(connection);
+                        writeTrackingCallBody(body, connection);
+
+                        connection.connect();
+
+                        int responseCode = connection.getResponseCode();
+                        if (responseCode != HttpsURLConnection.HTTP_OK) {
+                            throw new IOException("HTTP error code: " + responseCode);
+                        }
+                    } finally {
+                        if (connection != null) {
+                            connection.disconnect();
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    private void writeTrackingCallHeader(HttpsURLConnection connection) {
+        connection.setRequestProperty("Accept", "application/json");
+        connection.setRequestProperty("Content-Type", "application/json");
+    }
+
+    private void writeTrackingCallBody(JSONObject body, HttpsURLConnection connection) throws IOException {
+        byte[] bodyBytes = body.toString().getBytes("UTF-8");
+        OutputStream os = connection.getOutputStream();
+        os.write(bodyBytes);
+        os.close();
+    }
+
+    @SuppressLint("HardwareIds")
+    private JSONObject buildRequestBody(Context context) throws PackageManager.NameNotFoundException, JSONException {
+
+        String version = BuildConfig.VERSION_NAME;
+        String deviceId = "unknown";
+
+        if (context != null) {
+            deviceId = Settings.Secure.getString(context.getContentResolver(),
+                    Settings.Secure.ANDROID_ID);
+        }
+
+        JSONObject eventProperties = new JSONObject();
+        eventProperties.put("schemaId", schemaId == null ? "n/a" : schemaId);
+        eventProperties.put("client", "Android Debugger");
+        eventProperties.put("version", version);
+
+        JSONObject body = new JSONObject();
+        body.put("deviceId", deviceId);
+        body.put("eventName", "Debugger Started");
+        body.put("eventProperties", eventProperties);
+
+        return body;
     }
 
     private boolean checkDrawOverlayPermission(Activity activity) {

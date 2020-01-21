@@ -198,4 +198,16 @@ class DebuggerManagerTest {
         verify(timestamp).text = Util.timeString(lastEvent.timestamp)
         verify(eventName).text = lastEvent.name
     }
+
+    @Test
+    fun savesSchemaId() {
+        // Given
+        val schemaId = "test schema id"
+
+        // When
+        debuggerManager.setSchemaId(schemaId)
+
+        // Then
+       assertEquals(schemaId, debuggerManager.schemaId)
+    }
 }

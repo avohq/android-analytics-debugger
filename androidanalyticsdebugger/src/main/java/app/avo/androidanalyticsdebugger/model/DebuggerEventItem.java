@@ -1,5 +1,9 @@
 package app.avo.androidanalyticsdebugger.model;
 
+
+
+import android.support.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,9 +21,9 @@ public class DebuggerEventItem {
     public DebuggerEventItem() {}
 
     public DebuggerEventItem(String id, Long timestamp, String name,
-                             List<Map<String, String>> messages,
-                             List<Map<String, String>> eventProps,
-                             List<Map<String, String>> userProps) {
+                             @Nullable List<Map<String, String>> messages,
+                             @Nullable List<Map<String, String>> eventProps,
+                             @Nullable List<Map<String, String>> userProps) {
         this.id = id;
         this.timestamp = timestamp;
         this.name = name;
@@ -58,11 +62,10 @@ public class DebuggerEventItem {
 
     private DebuggerMessage createMessage(Map<String, String> messageMap) {
 
-        String tag = messageMap.get("tag");
         String propertyId = messageMap.get("propertyId");
         String message = messageMap.get("message");
 
-        if (tag == null || propertyId == null || message == null) {
+        if (propertyId == null || message == null) {
             return null;
         }
 
@@ -72,7 +75,7 @@ public class DebuggerEventItem {
             allowedTypesList = Arrays.asList(allowedTypesString.split(","));
         }
 
-        return new DebuggerMessage(tag, propertyId, message, allowedTypesList,
+        return new DebuggerMessage(propertyId, message, allowedTypesList,
                 messageMap.get("providedType"));
     }
 

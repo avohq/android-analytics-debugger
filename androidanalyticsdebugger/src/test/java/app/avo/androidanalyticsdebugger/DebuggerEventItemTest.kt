@@ -25,12 +25,10 @@ class DebuggerEventItemTest {
         // Then
         assertEquals(2, debuggerEventItem.messages.size)
 
-        assertEquals(properMessage0["tag"], debuggerEventItem.messages[0].tag)
         assertEquals(properMessage0["propertyId"], debuggerEventItem.messages[0].propertyId)
         assertEquals(properMessage0["message"], debuggerEventItem.messages[0].message)
         assertEquals(properMessage0["providedType"], debuggerEventItem.messages[0].providedType)
 
-        assertEquals(properMessage1["tag"], debuggerEventItem.messages[1].tag)
         assertEquals(properMessage1["propertyId"], debuggerEventItem.messages[1].propertyId)
         assertEquals(properMessage1["message"], debuggerEventItem.messages[1].message)
         assertEquals(properMessage1["providedType"], debuggerEventItem.messages[1].providedType)

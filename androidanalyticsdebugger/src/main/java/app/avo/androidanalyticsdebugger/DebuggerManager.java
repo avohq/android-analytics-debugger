@@ -25,6 +25,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -194,6 +197,38 @@ public class DebuggerManager {
             debuggerViewContainer = createBubbleView(rootActivity, layoutParams);
         }
         return debuggerViewContainer;
+    }
+
+    public void publishEvent(long timestamp, String name, List<EventProperty> properties, List<PropertyError> errors) {
+
+        List<Map<String, String>> eventProps = new ArrayList<>();
+
+        for (EventProperty eventProperty: properties) {
+            Map<String, String> propMap = new HashMap<>();
+
+            propMap.put("id", eventProperty.getId());
+            propMap.put("name", eventProperty.getName());
+            propMap.put("value", eventProperty.getValue());
+
+            eventProps.add(propMap);
+        }
+
+        List<Map<String, String>> messages = new ArrayList<>();
+
+        for (PropertyError propertyError: errors) {
+            Map<String, String> errorsMap = new HashMap<>();
+
+            errorsMap.put("propertyId", propertyError.getPropertyId());
+            errorsMap.put("message", propertyError.getMessage());
+
+            messages.add(errorsMap);
+        }
+
+
+        DebuggerEventItem event = new DebuggerEventItem("", timestamp, name,
+                messages, eventProps, null);
+
+        publishEvent(event);
     }
 
     public void publishEvent(DebuggerEventItem event) {

@@ -6,7 +6,6 @@ import java.util.List;
 
 public class DebuggerMessage {
 
-    public String tag;
     public String propertyId;
     public String message;
     @Nullable
@@ -14,10 +13,9 @@ public class DebuggerMessage {
     @Nullable
     public String providedType;
 
-    public DebuggerMessage(String tag, String propertyId, String message,
+    public DebuggerMessage(String propertyId, String message,
                            @Nullable List<String> allowedTypes,
                            @Nullable String providedType) {
-        this.tag = tag;
         this.propertyId = propertyId;
         this.message = message;
         this.allowedTypes = allowedTypes;
@@ -31,7 +29,6 @@ public class DebuggerMessage {
 
         DebuggerMessage that = (DebuggerMessage) o;
 
-        if (!tag.equals(that.tag)) return false;
         if (!propertyId.equals(that.propertyId)) return false;
         if (!message.equals(that.message)) return false;
         if (allowedTypes != null ? !allowedTypes.equals(that.allowedTypes) : that.allowedTypes != null)
@@ -41,8 +38,7 @@ public class DebuggerMessage {
 
     @Override
     public int hashCode() {
-        int result = tag.hashCode();
-        result = 31 * result + propertyId.hashCode();
+        int result = propertyId.hashCode();
         result = 31 * result + message.hashCode();
         result = 31 * result + (allowedTypes != null ? allowedTypes.hashCode() : 0);
         result = 31 * result + (providedType != null ? providedType.hashCode() : 0);

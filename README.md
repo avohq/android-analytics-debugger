@@ -82,7 +82,16 @@ Kotlin
 ```
     debuggerManager.hideDebugger(activity)
 ```    
-    
+
+## Post events
+```
+debuggerManager.publishEvent(/*timestamp =*/ System.currentTimeMillis(), /*name =*/ "Event Name",
+                /*properties =*/ listOf(EventProperty(/*id =*/ "id0", /*name =*/ "property0", "value"),
+                    EventProperty(/*id =*/ "id1", /*name =*/ "property1", "value")),
+                /*errors =*/ listOf(PropertyError(/*propertyId =*/ "id0", /*message =*/ "Error in property with id 'id0'")))
+
+```
+
 # Using with Avo
 Java
 ```

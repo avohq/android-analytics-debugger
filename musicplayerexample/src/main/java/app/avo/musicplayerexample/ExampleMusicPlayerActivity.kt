@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.View
 import app.avo.androidanalyticsdebugger.DebuggerManager
 import app.avo.androidanalyticsdebugger.DebuggerMode
+import app.avo.androidanalyticsdebugger.EventProperty
+import app.avo.androidanalyticsdebugger.PropertyError
 import kotlinx.android.synthetic.main.activity_music_player.*
 import sh.avo.Avo
 import java.util.*
@@ -39,6 +41,11 @@ class ExampleMusicPlayerActivity : AppCompatActivity() {
         prev_track.setOnClickListener {
             onPrevTrackClick()
         }
+
+        debuggerManager.publishEvent(/*timestamp =*/ System.currentTimeMillis(), /*name =*/ "Test custom event",
+                /*properties =*/ listOf(EventProperty(/*id =*/ "id0", /*name =*/ "property0", "value"),
+                    EventProperty(/*id =*/ "id1", /*name =*/ "property1", "value")),
+                /*errors =*/ listOf(PropertyError(/*propertyId =*/ "id0", /*message =*/ "Error in property with id 'id0'")))
     }
 
     private fun initShowDebuggerButtons() {

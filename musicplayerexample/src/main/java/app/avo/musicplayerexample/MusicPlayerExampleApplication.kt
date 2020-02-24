@@ -8,28 +8,30 @@ import timber.log.Timber
 
 class MusicPlayerExampleApplication : Application() {
 
-    var debugger = DebuggerManager()
+    lateinit var debugger: DebuggerManager
 
     override fun onCreate() {
         super.onCreate()
 
-          Avo.initAvo(AvoEnv.DEV,
-                object: ICustomDestination {
-                    override fun make(env: AvoEnv) {
-                    }
+        debugger = DebuggerManager(this)
 
-                    override fun logEvent(eventName: String, eventProperties: Map<String, *>) {
-                    }
+        Avo.initAvo(AvoEnv.DEV,
+            object: ICustomDestination {
+                override fun make(env: AvoEnv) {
+                }
 
-                    override fun setUserProperties(userId: String, userProperties: Map<String, *>) {
-                    }
+                override fun logEvent(eventName: String, eventProperties: Map<String, *>) {
+                }
 
-                    override fun identify(userId: String) {
-                    }
+                override fun setUserProperties(userId: String, userProperties: Map<String, *>) {
+                }
 
-                    override fun unidentify() {
-                    }
-            }, debugger)
+                override fun identify(userId: String) {
+                }
+
+                override fun unidentify() {
+                }
+        }, debugger)
 
         Avo.setAvoLogger({ message: String ->
             Timber.d(message)

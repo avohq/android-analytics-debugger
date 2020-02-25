@@ -7,23 +7,23 @@ import org.junit.Assert.*
 class DebuggerEventItemTest {
 
     @Test
-    fun messageRequiresTagPropertyIdAndMessage() {
+    fun messageRequiresPropertyIdAndMessage() {
 
         // Given
-        val properMessage0 = mapOf("tag" to "tag", "propertyId" to "propId", "message" to "mess")
-        val improperMessage0 = mapOf("propertyId" to "propId", "message" to "mess")
+        val properMessage0 = mapOf("tag" to "tag", "propertyId" to "propId0", "message" to "mess")
+        val properMessage1 = mapOf("propertyId" to "propId1", "message" to "mess")
         val improperMessage1 = mapOf("tag" to "tag", "message" to "mess")
         val improperMessage2 = mapOf("tag" to "tag", "propertyId" to "propId")
-        val properMessage1 = mapOf("tag" to "tag", "propertyId" to "propId", "message" to "mess",
+        val properMessage2 = mapOf("tag" to "tag", "propertyId" to "propId2", "message" to "mess",
                 "somerandomprop" to "rand", "providedType" to "someType")
 
         // When
         val debuggerEventItem = DebuggerEventItem("id", 1, "name",
-                listOf(properMessage0, improperMessage0, improperMessage1, improperMessage2,
-                        properMessage1), null, null)
+                listOf(properMessage0, properMessage1, improperMessage1, improperMessage2,
+                        properMessage2), null, null)
 
         // Then
-        assertEquals(2, debuggerEventItem.messages.size)
+        assertEquals(3, debuggerEventItem.messages.size)
 
         assertEquals(properMessage0["propertyId"], debuggerEventItem.messages[0].propertyId)
         assertEquals(properMessage0["message"], debuggerEventItem.messages[0].message)
@@ -32,6 +32,10 @@ class DebuggerEventItemTest {
         assertEquals(properMessage1["propertyId"], debuggerEventItem.messages[1].propertyId)
         assertEquals(properMessage1["message"], debuggerEventItem.messages[1].message)
         assertEquals(properMessage1["providedType"], debuggerEventItem.messages[1].providedType)
+
+        assertEquals(properMessage2["propertyId"], debuggerEventItem.messages[2].propertyId)
+        assertEquals(properMessage2["message"], debuggerEventItem.messages[2].message)
+        assertEquals(properMessage2["providedType"], debuggerEventItem.messages[2].providedType)
     }
 
     @Test

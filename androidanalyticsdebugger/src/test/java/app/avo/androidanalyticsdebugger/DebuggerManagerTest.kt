@@ -1,6 +1,7 @@
 package app.avo.androidanalyticsdebugger
 
 import android.app.Activity
+import android.content.Context
 import android.content.res.Resources
 import app.avo.androidanalyticsdebugger.debuggerview.DebuggerViewContainer
 import app.avo.androidanalyticsdebugger.model.DebuggerEventItem
@@ -19,10 +20,15 @@ import org.junit.Before
 
 class DebuggerManagerTest {
 
-    private var debuggerManager = DebuggerManager()
+    private lateinit var debuggerManager: DebuggerManager
 
     @Before
     fun setUp() {
+        val context: Context = mock()
+        val appContext = mock<Context>()
+        whenever(appContext.contentResolver).thenReturn(mock())
+        whenever(context.applicationContext).thenReturn(appContext)
+        debuggerManager = DebuggerManager(context)
         DebuggerManager.events.clear()
     }
 

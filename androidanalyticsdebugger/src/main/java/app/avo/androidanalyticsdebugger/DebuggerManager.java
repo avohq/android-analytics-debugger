@@ -4,13 +4,13 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 import android.support.v7.util.SortedList;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -25,7 +25,6 @@ import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,10 +32,10 @@ import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 
 import app.avo.androidanalyticsdebugger.debuggereventslist.NewEventListener;
-import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 import app.avo.androidanalyticsdebugger.debuggerview.BarViewContainer;
 import app.avo.androidanalyticsdebugger.debuggerview.BubbleViewContainer;
 import app.avo.androidanalyticsdebugger.debuggerview.DebuggerViewContainer;
+import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 
 public class DebuggerManager {
 
@@ -50,11 +49,43 @@ public class DebuggerManager {
     static WeakReference<DebuggerViewContainer> debuggerViewContainerRef =
             new WeakReference<>(null);
 
+    @SuppressLint("HardwareIds")
+    public DebuggerManager(@NonNull Context context) {
+        String deviceId = "unknown";
+        //noinspection ConstantConditions
+        if (context != null) {
+            deviceId = Settings.Secure.getString(context.getApplicationContext().getContentResolver(),
+                    Settings.Secure.ANDROID_ID);
+        }
+
+        final String finalDeviceId = deviceId;
+
+        DebuggerAnalytics.initAvo(DebuggerAnalytics.AvoEnv.PROD, DebuggerAnalytics.Client.ANDROID_DEBUGGER,
+                BuildConfig.VERSION_NAME, new DebuggerAnalytics.ICustomDestination() {
+                    @Override
+                    public void make(DebuggerAnalytics.AvoEnv env) {}
+
+                    @Override
+                    public void logEvent(String eventName, Map<String, Object> eventProperties) {
+                        trackDebuggerStarted(finalDeviceId, eventName, eventProperties);
+                    }
+
+                    @Override
+                    public void setUserProperties(String userId, Map<String, Object> userProperties) {}
+
+                    @Override
+                    public void identify(String userId) {}
+
+                    @Override
+                    public void unidentify() {}
+                });
+    }
+
     public void showDebugger(final Activity rootActivity, DebuggerMode mode) {
         showDebugger(rootActivity, mode, false);
     }
 
-    public void setSchemaId(String schemaId) {
+    public void setSchemaId(@NonNull String schemaId) {
         this.schemaId = schemaId;
     }
 
@@ -89,18 +120,18 @@ public class DebuggerManager {
                 debuggerViewContainer.showEvent(event);
             }
 
-            trackDebuggerStarted(rootActivity.getApplication());
+            DebuggerAnalytics.debuggerStarted(null, schemaId);
         }
     }
 
-    private void trackDebuggerStarted(final Context context) {
+    private void trackDebuggerStarted(final String deviceId, final String eventName, final Map eventProperties) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     URL apiUrl = new URL("https://api.avo.app/c/v1/track");
 
-                    JSONObject body = buildRequestBody(context);
+                    JSONObject body = buildRequestBody(deviceId, eventName, eventProperties);
 
                     HttpsURLConnection connection = null;
                     try {
@@ -125,8 +156,6 @@ public class DebuggerManager {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                } catch (PackageManager.NameNotFoundException e) {
-                    e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -146,25 +175,13 @@ public class DebuggerManager {
         os.close();
     }
 
-    @SuppressLint("HardwareIds")
-    private JSONObject buildRequestBody(Context context) throws PackageManager.NameNotFoundException, JSONException {
+    private JSONObject buildRequestBody(String deviceId, String eventName, Map eventProps) throws JSONException {
 
-        String version = BuildConfig.VERSION_NAME;
-        String deviceId = "unknown";
-
-        if (context != null) {
-            deviceId = Settings.Secure.getString(context.getContentResolver(),
-                    Settings.Secure.ANDROID_ID);
-        }
-
-        JSONObject eventProperties = new JSONObject();
-        eventProperties.put("schemaId", schemaId == null ? "n/a" : schemaId);
-        eventProperties.put("client", "Android Debugger");
-        eventProperties.put("version", version);
+        JSONObject eventProperties = new JSONObject(eventProps);
 
         JSONObject body = new JSONObject();
         body.put("deviceId", deviceId);
-        body.put("eventName", "Debugger Started");
+        body.put("eventName", eventName);
         body.put("eventProperties", eventProperties);
 
         return body;

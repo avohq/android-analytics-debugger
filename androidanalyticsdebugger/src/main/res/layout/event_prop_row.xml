@@ -5,9 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/prop_description"
+        >
+
     <TextView
         android:id="@+id/prop_name"
-        android:layout_width="wrap_content"
+        android:layout_width="88dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
         android:layout_marginStart="24dp"
@@ -20,24 +26,27 @@
 
     <TextView
         android:id="@+id/prop_value"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
         android:layout_marginRight="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="6dp"
         android:paddingBottom="6dp"
-        tools:text="sfsdsf3234s"
+        android:layout_toRightOf="@id/prop_name"
+        android:gravity="end"
+        tools:text="{'key': value, 'key': value, 'key': value, 'key': value, 'key': value, 'key': value, 'key': value}"
         android:textColor="@color/foreground"
         tools:ignore="RelativeOverlap" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/error"
-        android:layout_below="@id/prop_name"
+        android:layout_below="@id/prop_description"
         android:layout_marginTop="6dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"

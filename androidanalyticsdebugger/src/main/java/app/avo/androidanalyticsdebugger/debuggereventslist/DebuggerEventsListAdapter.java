@@ -21,17 +21,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import app.avo.androidanalyticsdebugger.DebuggerManager;
+import app.avo.androidanalyticsdebugger.model.DebuggerMessage;
+import app.avo.androidanalyticsdebugger.model.DebuggerProp;
 import app.avo.androidanalyticsdebugger.R;
 import app.avo.androidanalyticsdebugger.Util;
 import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
-import app.avo.androidanalyticsdebugger.model.DebuggerMessage;
-import app.avo.androidanalyticsdebugger.model.DebuggerProp;
 
-public class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEventsListAdapter.DebuggerEventViewHolder> {
+class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEventsListAdapter.DebuggerEventViewHolder> {
 
     private List<DebuggerEventItem> expendedEvents = new ArrayList<>();
 
-    public DebuggerEventsListAdapter() {
+    DebuggerEventsListAdapter() {
         if (DebuggerManager.events.size() > 0) {
             expendedEvents.add(DebuggerManager.events.get(0));
         }
@@ -230,7 +230,7 @@ public class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEven
         return DebuggerManager.events.size();
     }
 
-    public void onNewItem(DebuggerEventItem event) {
+    void onNewItem(DebuggerEventItem event) {
         expendedEvents.add(event);
         notifyDataSetChanged();
     }
@@ -239,14 +239,14 @@ public class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEven
         return expendedEvents;
     }
 
-    public static class DebuggerEventViewHolder extends RecyclerView.ViewHolder {
+    static class DebuggerEventViewHolder extends RecyclerView.ViewHolder {
         public TextView eventName;
         public LinearLayout expendedContent;
         public ImageView expendButton;
         public ImageView successIcon;
         public TextView timestamp;
 
-        public DebuggerEventViewHolder(@NonNull View itemView) {
+        DebuggerEventViewHolder(@NonNull View itemView) {
             super(itemView);
 
             eventName = itemView.findViewById(R.id.event_name);

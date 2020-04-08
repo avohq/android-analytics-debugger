@@ -1,7 +1,6 @@
 package app.avo.androidanalyticsdebugger.debuggerview;
 
 import android.annotation.SuppressLint;
-import android.content.res.Resources;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;

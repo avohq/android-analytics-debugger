@@ -5,7 +5,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
-import app.avo.androidanalyticsdebugger.debuggereventslist.DebuggerEventsListActivity;
+import app.avo.androidanalyticsdebugger.debuggereventslist._DebuggerEventsListActivity;
 import app.avo.androidanalyticsdebugger.debuggerview.DebuggerViewContainer;
 
 class DebuggerTouchHandler implements View.OnTouchListener {
@@ -50,7 +50,7 @@ class DebuggerTouchHandler implements View.OnTouchListener {
                     v.performClick();
                     onClickListener.onClick(v);
 
-                    Intent eventsListActivityIntent = new Intent(v.getContext(), DebuggerEventsListActivity.class);
+                    Intent eventsListActivityIntent = new Intent(v.getContext(), _DebuggerEventsListActivity.class);
                     v.getContext().startActivity(eventsListActivityIntent);
                 }
                 return true;

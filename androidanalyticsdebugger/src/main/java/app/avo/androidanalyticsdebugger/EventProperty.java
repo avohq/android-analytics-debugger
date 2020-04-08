@@ -2,6 +2,8 @@ package app.avo.androidanalyticsdebugger;
 
 import androidx.annotation.NonNull;
 
+import java.util.UUID;
+
 public class EventProperty {
     @NonNull
     private String id;
@@ -14,6 +16,10 @@ public class EventProperty {
         this.id = id;
         this.name = name;
         this.value = value;
+    }
+
+    public EventProperty(@NonNull String name, @NonNull String value) {
+        this(UUID.randomUUID().toString(), name, value);
     }
 
     @NonNull

@@ -23,7 +23,7 @@ class UtilTest {
 
         // Given
         val eventWithError = DebuggerEventItem("", 1, "",
-                mutableListOf(),null, null)
+                mutableListOf(), null, null)
 
         // Then
         assertFalse(Util.eventHaveErrors(eventWithError))

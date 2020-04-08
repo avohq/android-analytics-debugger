@@ -30,7 +30,10 @@ public class SandboxActivity extends AppCompatActivity {
 
         debuggerManager = new DebuggerManager(this);
 
-        debuggerManager.publishEvent(System.currentTimeMillis(), "Start event", new ArrayList<EventProperty>(), null);
+        debuggerManager.publishEvent(System.currentTimeMillis(), "Start event",
+                new ArrayList<EventProperty>(){{
+                    add(new EventProperty("Prop Name", "Prop Value"));
+                }}, null);
 
         Independent.setDebugger(debuggerManager);
         Independent.sendEvent("app open id", System.currentTimeMillis(), "App open",

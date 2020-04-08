@@ -37,12 +37,12 @@ Use the latest github release tag to get the latest version of the library.
 
 Java
 ```
-    DebuggerManager debuggerManager = new DebuggerManager();
+    DebuggerManager debugger = new DebuggerManager();
 ```
 
 Kotlin
 ```
-    val debuggerManager = DebuggerManager()
+    val debugger = DebuggerManager()
 ```
 
 ## Show the debugger
@@ -53,7 +53,7 @@ Java
     protected void onStart() {
         super.onStart();
 
-        debuggerManager.showDebugger(this, DebuggerMode.bar); // Can also be DebuggerMode.bubble
+        debugger.showDebugger(this, DebuggerMode.bar); // Can also be DebuggerMode.bubble
     }
 ```
 
@@ -62,7 +62,7 @@ Kotlin
     override fun onStart() {
         super.onStart()
 
-        debuggerManager.showDebugger(this, DebuggerMode.bar) // Can also be DebuggerMode.bubble
+        debugger.showDebugger(this, DebuggerMode.bar) // Can also be DebuggerMode.bubble
     }
 ```
     
@@ -75,21 +75,28 @@ If your app uses multiple activities:
 
 Java
 ```
-    debuggerManager.hideDebugger(activity);
+    debugger.hideDebugger(activity);
 ```
 
 Kotlin
 ```
-    debuggerManager.hideDebugger(activity)
+    debugger.hideDebugger(activity)
 ```    
 
 ## Post events
-```
-debuggerManager.publishEvent(/*timestamp =*/ System.currentTimeMillis(), /*name =*/ "Event Name",
-                /*properties =*/ listOf(EventProperty(/*id =*/ "id0", /*name =*/ "property0", "value"),
-                    EventProperty(/*id =*/ "id1", /*name =*/ "property1", "value")),
-                /*errors =*/ listOf(PropertyError(/*propertyId =*/ "id0", /*message =*/ "Error in property with id 'id0'")))
 
+Java
+```
+debugger.publishEvent(System.currentTimeMillis(), "Event Name",
+                new ArrayList<EventProperty>(){{
+                    add(new EventProperty("Prop Name", "Prop Value"));
+                }}, null);
+```
+
+Kotlin
+```
+debugger.publishEvent(System.currentTimeMillis(), "Event Name",
+                listOf(EventProperty("Prop Name", "Prop Value")), null)
 ```
 
 # Using with Avo
@@ -97,13 +104,13 @@ Java
 ```
     public class MusciPlayerExampleApplication extends Application {
 
-        DebuggerManager debuggerManager = new DebuggerManager();
+        DebuggerManager debugger = new DebuggerManager();
 
         @Override
         public void onCreate() {
             super.onCreate();
 
-            Avo.initAvo(Avo.AvoEnv.DEV, debuggerManager);
+            Avo.initAvo(Avo.AvoEnv.DEV, debugger);
             Avo.appOpened();
         }
     }
@@ -113,12 +120,12 @@ Kotlin
 ```
     class MusciPlayerExampleApplication : Application() {
 
-        val debuggerManager = DebuggerManager()
+        val debugger = DebuggerManager()
 
         override fun onCreate() {
             super.onCreate()
 
-            Avo.initAvo(Avo.AvoEnv.DEV, debuggerManager)
+            Avo.initAvo(Avo.AvoEnv.DEV, debugger)
             Avo.appOpened()
         }
     }

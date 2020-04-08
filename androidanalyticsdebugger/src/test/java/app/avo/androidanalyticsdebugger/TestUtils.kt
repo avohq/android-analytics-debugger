@@ -11,7 +11,6 @@ import com.nhaarman.mockitokotlin2.whenever
 import org.mockito.ArgumentMatchers
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier
-import java.sql.Timestamp
 
 
 @Throws(Exception::class)

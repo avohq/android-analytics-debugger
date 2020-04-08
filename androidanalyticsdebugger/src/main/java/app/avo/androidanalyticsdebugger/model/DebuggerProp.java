@@ -8,7 +8,7 @@ public class DebuggerProp {
 
     public DebuggerProp() {}
 
-    public DebuggerProp(String id, String name, String value) {
+    DebuggerProp(String id, String name, String value) {
         this.id = id;
         this.name = name;
         this.value = value;

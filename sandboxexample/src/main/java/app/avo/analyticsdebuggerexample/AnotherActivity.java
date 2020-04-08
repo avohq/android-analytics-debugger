@@ -21,6 +21,6 @@ public class AnotherActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        new DebuggerManager().showDebugger(this, DebuggerMode.bubble);
+        new DebuggerManager(this).showDebugger(this, DebuggerMode.bubble);
     }
 }

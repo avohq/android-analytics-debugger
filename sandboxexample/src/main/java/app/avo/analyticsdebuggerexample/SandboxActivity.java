@@ -28,7 +28,13 @@ public class SandboxActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sandbox);
 
-        debuggerManager = new DebuggerManager();
+        debuggerManager = new DebuggerManager(this);
+
+        debuggerManager.publishEvent(System.currentTimeMillis(), "Start event", new ArrayList<Map<String, String>>() {{
+            add(new HashMap<String, String>() {{
+                put()
+            }})
+        }});
 
         Independent.setDebugger(debuggerManager);
         Independent.sendEvent("app open id", System.currentTimeMillis(), "App open",

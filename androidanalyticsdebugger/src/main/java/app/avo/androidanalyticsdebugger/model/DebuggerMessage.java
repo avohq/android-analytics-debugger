@@ -14,7 +14,7 @@ public class DebuggerMessage {
     @Nullable
     public String providedType;
 
-    public DebuggerMessage(String propertyId, String message,
+    DebuggerMessage(String propertyId, String message,
                            @Nullable List<String> allowedTypes,
                            @Nullable String providedType) {
         this.propertyId = propertyId;

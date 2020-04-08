@@ -1,8 +1,10 @@
-package app.avo.androidanalyticsdebugger
+package app.avo.androidanalyticsdebugger.debuggereventslist
 
 import android.os.Build
 import android.view.View
-import app.avo.androidanalyticsdebugger.debuggereventslist.DebuggerEventsListActivity
+import app.avo.androidanalyticsdebugger.DebuggerManager
+import app.avo.androidanalyticsdebugger.R
+import app.avo.androidanalyticsdebugger.createBasicEvent
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Assert.assertEquals
@@ -20,7 +22,7 @@ class DebuggerEventsListActivityTest {
     @Test
     fun closeButtonClosesActivity() {
         // Given
-        val controller = buildActivity(DebuggerEventsListActivity::class.java)
+        val controller = buildActivity(_DebuggerEventsListActivity::class.java)
 
         // When
         controller.create(null)
@@ -33,7 +35,7 @@ class DebuggerEventsListActivityTest {
     @Test
     fun newEventTriggersAdapterRefresh() {
         // Given
-        val controller = buildActivity(DebuggerEventsListActivity::class.java)
+        val controller = buildActivity(_DebuggerEventsListActivity::class.java)
         controller.create(null)
         controller.get().adapter = mock()
         val event = createBasicEvent(1)
@@ -48,7 +50,7 @@ class DebuggerEventsListActivityTest {
     @Test
     fun clearsEventsListenerOnDestroy() {
         // Given
-        val controller = buildActivity(DebuggerEventsListActivity::class.java)
+        val controller = buildActivity(_DebuggerEventsListActivity::class.java)
         controller.create(null)
         controller.get().adapter = mock()
 

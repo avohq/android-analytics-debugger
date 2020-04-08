@@ -12,7 +12,7 @@ import app.avo.androidanalyticsdebugger.DebuggerManager;
 import app.avo.androidanalyticsdebugger.R;
 import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 
-public class DebuggerEventsListActivity extends AppCompatActivity {
+public class _DebuggerEventsListActivity extends AppCompatActivity {
 
     public DebuggerEventsListAdapter adapter;
 

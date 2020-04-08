@@ -322,7 +322,7 @@ interface Avo {
         upcomingTrackName: String
     )
     
-    
+
     companion object : Avo {
         var __STRICT__: Boolean = true
         lateinit var __ENV__: AvoEnv
@@ -330,8 +330,8 @@ interface Avo {
         private var __LOGGER__: (String) -> Unit = { message ->
           Log.d("AvoLogger", message)
         }
-        
-        fun setAvoLogger(logger: (String) -> Unit) {
+
+        @JvmStatic fun setAvoLogger(logger: (String) -> Unit) {
             __LOGGER__ = logger
         }
         

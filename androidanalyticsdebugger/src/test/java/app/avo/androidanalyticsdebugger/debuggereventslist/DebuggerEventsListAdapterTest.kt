@@ -1,7 +1,10 @@
-package app.avo.androidanalyticsdebugger
+package app.avo.androidanalyticsdebugger.debuggereventslist
 
 import android.view.View
-import app.avo.androidanalyticsdebugger.debuggereventslist.DebuggerEventsListAdapter
+import app.avo.androidanalyticsdebugger.DebuggerManager
+import app.avo.androidanalyticsdebugger.Util
+import app.avo.androidanalyticsdebugger.createBasicEvent
+import app.avo.androidanalyticsdebugger.createErrorEvent
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
@@ -10,7 +13,7 @@ import org.junit.Assert.*
 
 class DebuggerEventsListAdapterTest {
 
-    lateinit var sut: DebuggerEventsListAdapter
+    private lateinit var sut: DebuggerEventsListAdapter
 
     @Test
     fun onlyLastEventAndErrorsAreExpended() {

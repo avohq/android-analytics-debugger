@@ -28,7 +28,7 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-public final class DebuggerAnalytics {
+final class DebuggerAnalytics {
     public enum AvoEnv {
         PROD,
         DEV;

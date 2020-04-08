@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -216,7 +217,7 @@ public class DebuggerManager {
         return debuggerViewContainer;
     }
 
-    public void publishEvent(long timestamp, String name, List<EventProperty> properties, List<PropertyError> errors) {
+    public void publishEvent(long timestamp, String name, List<EventProperty> properties, @Nullable List<PropertyError> errors) {
 
         List<Map<String, String>> eventProps = new ArrayList<>();
 
@@ -231,24 +232,24 @@ public class DebuggerManager {
         }
 
         List<Map<String, String>> messages = new ArrayList<>();
+        if (errors != null) {
+            for (PropertyError propertyError: errors) {
+                Map<String, String> errorsMap = new HashMap<>();
 
-        for (PropertyError propertyError: errors) {
-            Map<String, String> errorsMap = new HashMap<>();
+                errorsMap.put("propertyId", propertyError.getPropertyId());
+                errorsMap.put("message", propertyError.getMessage());
 
-            errorsMap.put("propertyId", propertyError.getPropertyId());
-            errorsMap.put("message", propertyError.getMessage());
-
-            messages.add(errorsMap);
+                messages.add(errorsMap);
+            }
         }
 
-
-        DebuggerEventItem event = new DebuggerEventItem("", timestamp, name,
-                messages, eventProps, null);
+        DebuggerEventItem event = new DebuggerEventItem(UUID.randomUUID().toString(),
+                timestamp, name, messages, eventProps, null);
 
         publishEvent(event);
     }
 
-    public void publishEvent(DebuggerEventItem event) {
+    void publishEvent(DebuggerEventItem event) {
         DebuggerViewContainer debuggerViewContainer = debuggerViewContainerRef.get();
 
         if (debuggerViewContainer != null) {
@@ -263,12 +264,12 @@ public class DebuggerManager {
 
     @SuppressWarnings("unused")
     public void publishEvent(String id, Long timestamp, String name,
-                             List<Map<String, String>> messages,
+                             List<Map<String, String>> errors,
                              List<Map<String, String>> eventProps,
                              List<Map<String, String>> userProps) {
 
         DebuggerEventItem event = new DebuggerEventItem(id, timestamp, name,
-                messages, eventProps, userProps);
+                errors, eventProps, userProps);
 
         publishEvent(event);
     }

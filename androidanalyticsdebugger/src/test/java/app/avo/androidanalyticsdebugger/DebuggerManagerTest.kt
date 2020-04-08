@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import app.avo.androidanalyticsdebugger.debuggerview.DebuggerViewContainer
-import app.avo.androidanalyticsdebugger.model.DebuggerEventItem
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.spy
 import com.nhaarman.mockitokotlin2.verify
@@ -14,6 +13,7 @@ import java.util.*
 import org.junit.Assert.*
 import android.view.WindowManager
 import android.widget.TextView
+import app.avo.androidanalyticsdebugger.model.DebuggerEventItem
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
 

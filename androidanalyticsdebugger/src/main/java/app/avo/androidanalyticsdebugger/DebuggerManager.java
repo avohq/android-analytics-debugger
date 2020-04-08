@@ -249,7 +249,7 @@ public class DebuggerManager {
         publishEvent(event);
     }
 
-    void publishEvent(DebuggerEventItem event) {
+    public void publishEvent(DebuggerEventItem event) {
         DebuggerViewContainer debuggerViewContainer = debuggerViewContainerRef.get();
 
         if (debuggerViewContainer != null) {

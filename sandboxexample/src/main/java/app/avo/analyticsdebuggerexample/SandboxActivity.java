@@ -15,6 +15,7 @@ import java.util.Map;
 
 import app.avo.androidanalyticsdebugger.DebuggerManager;
 import app.avo.androidanalyticsdebugger.DebuggerMode;
+import app.avo.androidanalyticsdebugger.EventProperty;
 import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 import app.avo.androidanalyticsdebugger.model.DebuggerProp;
 import app.avo.independent.Independent;
@@ -30,11 +31,7 @@ public class SandboxActivity extends AppCompatActivity {
 
         debuggerManager = new DebuggerManager(this);
 
-        debuggerManager.publishEvent(System.currentTimeMillis(), "Start event", new ArrayList<Map<String, String>>() {{
-            add(new HashMap<String, String>() {{
-                put()
-            }})
-        }});
+        debuggerManager.publishEvent(System.currentTimeMillis(), "Start event", new ArrayList<EventProperty>(), null);
 
         Independent.setDebugger(debuggerManager);
         Independent.sendEvent("app open id", System.currentTimeMillis(), "App open",

@@ -1,4 +1,6 @@
-# android-analytics-debugger
+# Analytics Debugger
+
+[![](https://jitpack.io/v/avohq/android-analytics-debugger.svg)](https://jitpack.io/#avohq/android-analytics-debugger)
 
 ## Add gradle dependency
 

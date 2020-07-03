@@ -8,6 +8,8 @@ import android.content.res.Resources;
 import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -41,7 +43,8 @@ import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 
 public class DebuggerManager {
 
-    public @Nullable String schemaId = null;
+    public @Nullable
+    String schemaId = null;
 
     public static SortedList<DebuggerEventItem> events = new SortedList<>(DebuggerEventItem.class,
             new EventsSorting());
@@ -64,7 +67,8 @@ public class DebuggerManager {
         DebuggerAnalytics.initAvo(DebuggerAnalytics.AvoEnv.PROD, DebuggerAnalytics.Client.ANDROID_DEBUGGER,
                 BuildConfig.VERSION_NAME, new DebuggerAnalytics.ICustomDestination() {
                     @Override
-                    public void make(DebuggerAnalytics.AvoEnv env) {}
+                    public void make(DebuggerAnalytics.AvoEnv env) {
+                    }
 
                     @Override
                     public void logEvent(String eventName, Map<String, Object> eventProperties) {
@@ -72,13 +76,16 @@ public class DebuggerManager {
                     }
 
                     @Override
-                    public void setUserProperties(String userId, Map<String, Object> userProperties) {}
+                    public void setUserProperties(String userId, Map<String, Object> userProperties) {
+                    }
 
                     @Override
-                    public void identify(String userId) {}
+                    public void identify(String userId) {
+                    }
 
                     @Override
-                    public void unidentify() {}
+                    public void unidentify() {
+                    }
                 });
     }
 
@@ -91,38 +98,42 @@ public class DebuggerManager {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void showDebugger(final Activity rootActivity, DebuggerMode mode, boolean systemOverlay) {
+    public void showDebugger(final Activity rootActivity, final DebuggerMode mode, final boolean systemOverlay) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                if (!systemOverlay || checkDrawOverlayPermission(rootActivity)) {
+                    hideDebuggerThreadUnsafe(rootActivity);
 
-        if (!systemOverlay || checkDrawOverlayPermission(rootActivity)) {
-            hideDebugger(rootActivity);
+                    final WindowManager windowManager = rootActivity.getWindowManager();
+                    final DisplayMetrics displayMetrics = new DisplayMetrics();
+                    final Display display = windowManager.getDefaultDisplay();
+                    if (display != null) {
+                        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+                    }
 
-            final WindowManager windowManager = rootActivity.getWindowManager();
-            final DisplayMetrics displayMetrics = new DisplayMetrics();
-            final Display display = windowManager.getDefaultDisplay();
-            if (display != null) {
-                windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+                    final WindowManager.LayoutParams layoutParams
+                            = prepareWindowManagerLayoutParams(rootActivity, displayMetrics, systemOverlay);
+
+                    final DebuggerViewContainer debuggerViewContainer = createDebuggerView(rootActivity, mode,
+                            layoutParams);
+
+                    windowManager.addView(debuggerViewContainer.getView(), layoutParams);
+
+                    debuggerViewContainer.getView().setOnTouchListener(new DebuggerTouchHandler(windowManager,
+                            layoutParams, debuggerViewContainer));
+
+                    debuggerViewContainerRef = new WeakReference<>(debuggerViewContainer);
+
+                    for (int i = events.size() - 1; i >= 0; i--) {
+                        DebuggerEventItem event = events.get(i);
+                        debuggerViewContainer.showEvent(event);
+                    }
+
+                    DebuggerAnalytics.debuggerStarted(null, schemaId);
+                }
             }
-
-            final WindowManager.LayoutParams layoutParams
-                    = prepareWindowManagerLayoutParams(rootActivity, displayMetrics, systemOverlay);
-
-            final DebuggerViewContainer debuggerViewContainer = createDebuggerView(rootActivity, mode,
-                    layoutParams);
-
-            windowManager.addView(debuggerViewContainer.getView(), layoutParams);
-
-            debuggerViewContainer.getView().setOnTouchListener(new DebuggerTouchHandler(windowManager,
-                    layoutParams, debuggerViewContainer));
-
-            debuggerViewContainerRef = new WeakReference<>(debuggerViewContainer);
-
-            for (int i = events.size() - 1; i >= 0 ; i--) {
-                DebuggerEventItem event = events.get(i);
-                debuggerViewContainer.showEvent(event);
-            }
-
-            DebuggerAnalytics.debuggerStarted(null, schemaId);
-        }
+        });
     }
 
     private void trackDebuggerStarted(final String deviceId, final String eventName, final Map eventProperties) {
@@ -199,7 +210,7 @@ public class DebuggerManager {
                         Toast.LENGTH_LONG).show();
                 return false;
             } else {
-               return true;
+                return true;
             }
         } else {
             return true;
@@ -217,11 +228,10 @@ public class DebuggerManager {
         return debuggerViewContainer;
     }
 
-    public void publishEvent(long timestamp, String name, List<EventProperty> properties, @Nullable List<PropertyError> errors) {
-
+    public void publishEvent(final long timestamp, final String name, final List<EventProperty> properties, @Nullable final List<PropertyError> errors) {
         List<Map<String, String>> eventProps = new ArrayList<>();
 
-        for (EventProperty eventProperty: properties) {
+        for (EventProperty eventProperty : properties) {
             Map<String, String> propMap = new HashMap<>();
 
             propMap.put("id", eventProperty.getId());
@@ -233,7 +243,7 @@ public class DebuggerManager {
 
         List<Map<String, String>> messages = new ArrayList<>();
         if (errors != null) {
-            for (PropertyError propertyError: errors) {
+            for (PropertyError propertyError : errors) {
                 Map<String, String> errorsMap = new HashMap<>();
 
                 errorsMap.put("propertyId", propertyError.getPropertyId());
@@ -249,17 +259,22 @@ public class DebuggerManager {
         publishEvent(event);
     }
 
-    public void publishEvent(DebuggerEventItem event) {
-        DebuggerViewContainer debuggerViewContainer = debuggerViewContainerRef.get();
+    public void publishEvent(final DebuggerEventItem event) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                DebuggerViewContainer debuggerViewContainer = debuggerViewContainerRef.get();
 
-        if (debuggerViewContainer != null) {
-            debuggerViewContainer.showEvent(event);
-        }
+                if (debuggerViewContainer != null) {
+                    debuggerViewContainer.showEvent(event);
+                }
 
-        events.add(event);
-        if (eventUpdateListener != null) {
-            eventUpdateListener.onNewEvent(event);
-        }
+                events.add(event);
+                if (eventUpdateListener != null) {
+                    eventUpdateListener.onNewEvent(event);
+                }
+            }
+        });
     }
 
     @SuppressWarnings("unused")
@@ -325,13 +340,23 @@ public class DebuggerManager {
         return new BarViewContainer(rootActivity.getLayoutInflater());
     }
 
-    public void hideDebugger(Activity anyActivity) {
+    public void hideDebugger(final Activity anyActivity) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                hideDebuggerThreadUnsafe(anyActivity);
+            }
+        });
+    }
+
+    private void hideDebuggerThreadUnsafe(Activity activity) {
         DebuggerViewContainer debuggerViewContainer = debuggerViewContainerRef.get();
         if (debuggerViewContainer != null) {
             try {
-                anyActivity.getWindowManager().removeView(debuggerViewContainer.getView());
+                activity.getWindowManager().removeView(debuggerViewContainer.getView());
                 debuggerViewContainerRef = new WeakReference<>(null);
-            } catch (Throwable ignored) {}
+            } catch (Throwable ignored) {
+            }
         }
     }
 
@@ -342,7 +367,8 @@ public class DebuggerManager {
         }
 
         @Override
-        public void onChanged(int position, int count) {}
+        public void onChanged(int position, int count) {
+        }
 
         @Override
         public boolean areContentsTheSame(DebuggerEventItem oldItem, DebuggerEventItem newItem) {
@@ -355,12 +381,15 @@ public class DebuggerManager {
         }
 
         @Override
-        public void onInserted(int position, int count) {}
+        public void onInserted(int position, int count) {
+        }
 
         @Override
-        public void onRemoved(int position, int count) {}
+        public void onRemoved(int position, int count) {
+        }
 
         @Override
-        public void onMoved(int fromPosition, int toPosition) {}
+        public void onMoved(int fromPosition, int toPosition) {
+        }
     }
 }

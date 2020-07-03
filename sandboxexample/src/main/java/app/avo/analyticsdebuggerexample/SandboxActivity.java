@@ -30,10 +30,15 @@ public class SandboxActivity extends AppCompatActivity {
 
         debuggerManager = new DebuggerManager(this);
 
-        debuggerManager.publishEvent(System.currentTimeMillis(), "Start event",
-                new ArrayList<EventProperty>(){{
-                    add(new EventProperty("Prop Name", "Prop Value"));
-                }}, null);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                debuggerManager.publishEvent(System.currentTimeMillis(), "Start event",
+                        new ArrayList<EventProperty>(){{
+                            add(new EventProperty("Prop Name", "Prop Value"));
+                        }}, null);
+            }
+        }).start();
 
         Independent.setDebugger(debuggerManager);
         Independent.sendEvent("app open id", System.currentTimeMillis(), "App open",
@@ -47,7 +52,7 @@ public class SandboxActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (debuggerManager != null) {
-                    ArrayList<Map<String, String>> eventProps = new ArrayList<>();
+                    final ArrayList<Map<String, String>> eventProps = new ArrayList<>();
 
                     eventProps.add(new HashMap<String, String>() {{
                         put("id", "event prop id");
@@ -60,7 +65,7 @@ public class SandboxActivity extends AppCompatActivity {
                         put("value", "sdfdf2");
                     }});
 
-                    ArrayList<Map<String, String>> messages = new ArrayList<>();
+                    final ArrayList<Map<String, String>> messages = new ArrayList<>();
                     messages.add(new HashMap<String, String>() {{
                         put("tag", "tagValue");
                         put("propertyId", "event prop id");
@@ -69,11 +74,15 @@ public class SandboxActivity extends AppCompatActivity {
                         put("providedType", "gif");
                     }});
 
-                    Independent.sendEvent("ew23fe",
-                            System.currentTimeMillis(),
-                            "Error event Error event Error event Error event Error event Error event",
-                            messages,
-                            eventProps, new ArrayList<Map<String, String>>());
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Independent.sendEvent("ew23fe",
+                                    System.currentTimeMillis(),
+                                    "Error event Error event Error event Error event Error event Error event",
+                                    messages,
+                                    eventProps, new ArrayList<Map<String, String>>());
+                        }}).start();
                 }
             }
         });
@@ -163,6 +172,10 @@ public class SandboxActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        debuggerManager.showDebugger(this, DebuggerMode.bar);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                debuggerManager.showDebugger(SandboxActivity.this, DebuggerMode.bar);
+            }}).start();
     }
 }

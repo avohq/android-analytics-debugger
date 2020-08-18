@@ -15,9 +15,9 @@ class MusicPlayerExampleApplication : Application() {
 
         debugger = DebuggerManager(this)
 
-        Avo.initAvo(AvoEnv.DEV,
-            object: ICustomDestination {
-                override fun make(env: AvoEnv) {
+        Avo.initAvo(this, this.applicationContext, Avo.AvoEnv.DEV,
+            object: Avo.ICustomDestination {
+                override fun make(env: Avo.AvoEnv) {
                 }
 
                 override fun logEvent(eventName: String, eventProperties: Map<String, *>) {
@@ -32,10 +32,6 @@ class MusicPlayerExampleApplication : Application() {
                 override fun unidentify() {
                 }
         }, debugger)
-
-        Avo.setAvoLogger({ message: String ->
-            Timber.d(message)
-        })
 
         Avo.appOpened()
     }

@@ -3,6 +3,7 @@ package app.avo.androidanalyticsdebugger
 import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
+import android.os.Handler
 import app.avo.androidanalyticsdebugger.debuggerview.DebuggerViewContainer
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.spy
@@ -67,7 +68,9 @@ class DebuggerManagerTest {
         debuggerManager.publishEvent(event)
 
         // Then
-        assert(event == DebuggerManager.events[0])
+        Handler().post({
+            assert(event == DebuggerManager.events[0])
+        })
     }
 
     @Test
@@ -82,8 +85,10 @@ class DebuggerManagerTest {
         debuggerManager.publishEvent(firstEvent)
 
         // Then
-        assertEquals(secondEvent, DebuggerManager.events[0])
-        assertEquals(firstEvent, DebuggerManager.events[1])
+        Handler().post({
+            assertEquals(secondEvent, DebuggerManager.events[0])
+            assertEquals(firstEvent, DebuggerManager.events[1])
+        })
     }
 
     @Test
@@ -98,7 +103,9 @@ class DebuggerManagerTest {
         debuggerManager.publishEvent(event)
 
         // Then
-        verify(mockDebugger).showEvent(event)
+        Handler().post({
+            verify(mockDebugger).showEvent(event)
+        })
     }
 
     @Test
@@ -112,7 +119,9 @@ class DebuggerManagerTest {
         debuggerManager.publishEvent(event)
 
         // Then
-        verify(DebuggerManager.eventUpdateListener).onNewEvent(event)
+        Handler().post({
+            verify(DebuggerManager.eventUpdateListener).onNewEvent(event)
+        })
     }
 
     @Test
@@ -144,7 +153,6 @@ class DebuggerManagerTest {
         // Given
         DebuggerManager.debuggerViewContainerRef = WeakReference(null)
 
-
         // Then
         assertFalse(debuggerManager.isEnabled)
     }
@@ -171,7 +179,9 @@ class DebuggerManagerTest {
         debuggerManager.showDebugger(mockActivity, DebuggerMode.bubble)
 
         // Then
-        verify(counter).text = "10"
+        Handler().post({
+            verify(counter).text = "10"
+        })
     }
 
     @Test
@@ -201,8 +211,10 @@ class DebuggerManagerTest {
         debuggerManager.showDebugger(mockActivity, DebuggerMode.bar)
 
         // Then
-        verify(timestamp).text = Util.timeString(lastEvent.timestamp)
-        verify(eventName).text = lastEvent.name
+        Handler().post({
+            verify(timestamp).text = Util.timeString(lastEvent.timestamp)
+            verify(eventName).text = lastEvent.name
+        })
     }
 
     @Test

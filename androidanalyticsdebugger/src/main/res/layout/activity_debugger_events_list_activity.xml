@@ -25,19 +25,28 @@
         android:id="@+id/close_button"
         android:layout_width="44dp"
         android:layout_height="0dp"
-        android:scaleType="center"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
         android:layout_above="@id/top_divider"
-        android:src="@drawable/close_button"
-        android:contentDescription="@string/close_button_description" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:contentDescription="@string/close_button_description"
+        android:scaleType="center"
+        android:src="@drawable/close_button" />
+
+    <ImageView
+        android:id="@+id/sort_button"
+        android:layout_width="44dp"
+        android:layout_height="0dp"
+        android:layout_above="@id/top_divider"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@string/sort_button_description"
+        android:layout_marginStart="8dp"
+        android:scaleType="center"
+        android:src="@android:drawable/ic_menu_sort_alphabetically" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/events_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/top_divider"
-        />
+        android:layout_below="@id/top_divider" />
 
 </RelativeLayout>

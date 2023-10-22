@@ -2,6 +2,7 @@ package app.avo.androidanalyticsdebugger.debuggereventslist;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -16,6 +17,8 @@ import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 public class _DebuggerEventsListActivity extends AppCompatActivity {
 
     public DebuggerEventsListAdapter adapter;
+
+    private Sorting currentSorting = Sorting.Default;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,6 +38,24 @@ public class _DebuggerEventsListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+
+        final ImageView sortButton = findViewById(R.id.sort_button);
+        sortButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (currentSorting == Sorting.Default) {
+                    currentSorting = Sorting.Alphabetical;
+                    sortButton.setImageResource(android.R.drawable.ic_menu_sort_by_size);
+                } else {
+                    currentSorting = Sorting.Default;
+                    sortButton.setImageResource(android.R.drawable.ic_menu_sort_alphabetically);
+                }
+
+                adapter = new DebuggerEventsListAdapter(currentSorting);
+                recycler.setAdapter(adapter);
+                recycler.setLayoutManager(new LinearLayoutManager(_DebuggerEventsListActivity.this));
             }
         });
 

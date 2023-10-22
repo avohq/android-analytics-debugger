@@ -25,13 +25,24 @@
         android:id="@+id/close_button"
         android:layout_width="44dp"
         android:layout_height="0dp"
-        android:scaleType="center"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
         android:layout_above="@id/top_divider"
-        android:src="@drawable/close_button"
-        android:contentDescription="@string/close_button_description" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:contentDescription="@string/close_button_description"
+        android:scaleType="center"
+        android:src="@drawable/close_button" />
+
+    <TextView
+        android:id="@+id/clear_events_button"
+        android:text="Clear"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_above="@id/top_divider"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="16dp"
+        android:layout_toStartOf="@+id/close_button"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/events_list"

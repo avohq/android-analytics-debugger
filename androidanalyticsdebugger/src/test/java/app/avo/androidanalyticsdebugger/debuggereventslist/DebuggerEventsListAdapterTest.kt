@@ -1,7 +1,6 @@
 package app.avo.androidanalyticsdebugger.debuggereventslist
 
 import android.view.View
-import androidx.recyclerview.widget.SortedList
 import app.avo.androidanalyticsdebugger.DebuggerManager
 import app.avo.androidanalyticsdebugger.Util
 import app.avo.androidanalyticsdebugger.createBasicEvent

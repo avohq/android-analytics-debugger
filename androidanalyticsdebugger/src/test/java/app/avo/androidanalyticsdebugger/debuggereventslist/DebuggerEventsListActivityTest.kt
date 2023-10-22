@@ -2,15 +2,13 @@ package app.avo.androidanalyticsdebugger.debuggereventslist
 
 import android.os.Build
 import android.view.View
-import android.widget.ImageView
 import app.avo.androidanalyticsdebugger.DebuggerManager
 import app.avo.androidanalyticsdebugger.R
 import app.avo.androidanalyticsdebugger.createBasicEvent
 import app.avo.androidanalyticsdebugger.createErrorEvent
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric.buildActivity
@@ -85,5 +83,21 @@ class DebuggerEventsListActivityTest {
         assertEquals(midnightEvent, activity.adapter.events[0])
         assertEquals(middayEvent, activity.adapter.events[1])
         assertEquals(2, activity.adapter.events.size())
+    }
+
+    @Test
+    fun triggersFilterEditText() {
+        // Given
+        val controller = buildActivity(_DebuggerEventsListActivity::class.java)
+
+        controller.create(null)
+        val activity = controller.get()
+        assertEquals(View.GONE, activity.findViewById<View>(R.id.filter_input).visibility)
+
+        // When
+        activity.findViewById<View>(R.id.filter_input_toggle).performClick()
+
+        // Then
+        assertEquals(View.VISIBLE, activity.findViewById<View>(R.id.filter_input).visibility)
     }
 }

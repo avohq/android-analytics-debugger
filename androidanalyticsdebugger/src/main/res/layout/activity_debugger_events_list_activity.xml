@@ -38,6 +38,8 @@
         android:text="Clear"
         android:gravity="center"
         android:layout_width="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
         android:layout_height="0dp"
         android:layout_above="@id/top_divider"
         android:layout_alignParentTop="true"

@@ -18,6 +18,8 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SortedList;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,59 +32,18 @@ import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 
 enum Sorting {
     Default,
-    Alphabetical
 }
 
 class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEventsListAdapter.DebuggerEventViewHolder> {
 
-    private List<DebuggerEventItem> expendedEvents = new ArrayList<>();
+    private final List<DebuggerEventItem> expendedEvents = new ArrayList<>();
     private SortedList<DebuggerEventItem> events;
 
-    DebuggerEventsListAdapter(Sorting sorting) {
-        if (sorting == Sorting.Alphabetical) {
-            events = new SortedList<>(DebuggerEventItem.class, new SortedList.Callback<DebuggerEventItem>() {
-                @Override
-                public int compare(DebuggerEventItem o1, DebuggerEventItem o2) {
-                    int compareNamesAscending = o1.name.compareTo(o2.name);
-                    if (compareNamesAscending == 0) {
-                        int compareTimestampsDescending = o2.timestamp.compareTo(o1.timestamp);
-                        return compareTimestampsDescending;
-                    }
-                    return compareNamesAscending;
-                }
-
-                @Override
-                public void onChanged(int position, int count) {
-                }
-
-                @Override
-                public boolean areContentsTheSame(DebuggerEventItem oldItem, DebuggerEventItem newItem) {
-                    return oldItem.equals(newItem);
-                }
-
-                @Override
-                public boolean areItemsTheSame(DebuggerEventItem item1, DebuggerEventItem item2) {
-                    return item1 == item2;
-                }
-
-                @Override
-                public void onInserted(int position, int count) {
-                }
-
-                @Override
-                public void onRemoved(int position, int count) {
-                }
-
-                @Override
-                public void onMoved(int fromPosition, int toPosition) {
-                }
-            });
-            for (int i = 0; i < DebuggerManager.events.size(); i++) {
-                DebuggerEventItem debuggerEventItem = DebuggerManager.events.get(i);
-                events.add(debuggerEventItem);
-            }
-        } else {
-            events = DebuggerManager.events;
+    DebuggerEventsListAdapter() {
+        events = new SortedList<>(DebuggerEventItem.class, new DebuggerManager.EventsSorting());
+        for (int i = 0; i < DebuggerManager.events.size(); i++) {
+            DebuggerEventItem debuggerEventItem = DebuggerManager.events.get(i);
+            events.add(debuggerEventItem);
         }
 
         if (events.size() > 0) {
@@ -284,6 +245,7 @@ class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEventsListA
     }
 
     void onNewItem(DebuggerEventItem event) {
+        events.add(event); // TODO manual refresh instead
         expendedEvents.add(event);
         notifyDataSetChanged();
     }
@@ -294,6 +256,17 @@ class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEventsListA
 
     public SortedList<DebuggerEventItem> getEvents() {
         return events;
+    }
+
+    void filter(@NotNull String s) {
+        events.clear();
+        for (int i = 0; i < DebuggerManager.events.size(); i++) {
+            DebuggerEventItem debuggerEventItem = DebuggerManager.events.get(i);
+            if (s.isEmpty() || debuggerEventItem.name.contains(s)) {
+                events.add(debuggerEventItem);
+            }
+        }
+        notifyDataSetChanged();
     }
 
     static class DebuggerEventViewHolder extends RecyclerView.ViewHolder {

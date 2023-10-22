@@ -18,8 +18,6 @@ public class _DebuggerEventsListActivity extends AppCompatActivity {
 
     public DebuggerEventsListAdapter adapter;
 
-    private Sorting currentSorting = Sorting.Default;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +27,7 @@ public class _DebuggerEventsListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_debugger_events_list_activity);
 
         final RecyclerView recycler = findViewById(R.id.events_list);
-        adapter = new DebuggerEventsListAdapter(Sorting.Default);
+        adapter = new DebuggerEventsListAdapter();
         recycler.setAdapter(adapter);
         recycler.setLayoutManager(new LinearLayoutManager(this));
 
@@ -38,24 +36,6 @@ public class _DebuggerEventsListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
-            }
-        });
-
-        final ImageView sortButton = findViewById(R.id.sort_button);
-        sortButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (currentSorting == Sorting.Default) {
-                    currentSorting = Sorting.Alphabetical;
-                    sortButton.setImageResource(android.R.drawable.ic_menu_sort_by_size);
-                } else {
-                    currentSorting = Sorting.Default;
-                    sortButton.setImageResource(android.R.drawable.ic_menu_sort_alphabetically);
-                }
-
-                adapter = new DebuggerEventsListAdapter(currentSorting);
-                recycler.setAdapter(adapter);
-                recycler.setLayoutManager(new LinearLayoutManager(_DebuggerEventsListActivity.this));
             }
         });
 

@@ -32,7 +32,7 @@ class DebuggerEventsListAdapterTest {
         DebuggerManager.events.add(lastEvent)
 
         // When
-        sut = DebuggerEventsListAdapter(Sorting.Default)
+        sut = DebuggerEventsListAdapter()
 
         // Then
         assertEquals(2, sut.expendedEvents.size)
@@ -55,7 +55,7 @@ class DebuggerEventsListAdapterTest {
 
         val event = createBasicEvent(4)
         DebuggerManager.events.add(event)
-        sut = DebuggerEventsListAdapter(Sorting.Default)
+        sut = DebuggerEventsListAdapter()
 
         // When
         sut.onBindViewHolder(viewHolder, 0)
@@ -77,31 +77,13 @@ class DebuggerEventsListAdapterTest {
         DebuggerManager.events.add(lastEvent)
 
         // When
-        sut = DebuggerEventsListAdapter(Sorting.Default)
+        sut = DebuggerEventsListAdapter()
 
         // Then
-        assertEquals(DebuggerManager.events, sut.events)
-    }
-
-    @Test
-    fun usesNameSortingWhenChosen() {
-        // Given
-        val bEarlierEvent = createErrorEvent(1, name = "b")
-        val bLaterEvent = createBasicEvent(4, name = "b")
-        val aEvent = createBasicEvent(2, name = "a")
-        val cEvent = createBasicEvent(3, name = "c")
-        DebuggerManager.events.add(bLaterEvent)
-        DebuggerManager.events.add(aEvent)
-        DebuggerManager.events.add(cEvent)
-        DebuggerManager.events.add(bEarlierEvent)
-
-        // When
-        sut = DebuggerEventsListAdapter(Sorting.Alphabetical)
-
-        // Then
-        assertEquals(aEvent, sut.events[0])
-        assertEquals(bLaterEvent, sut.events[1])
-        assertEquals(bEarlierEvent, sut.events[2])
-        assertEquals(cEvent, sut.events[3])
+        assertEquals(DebuggerManager.events.size(), sut.events.size())
+        assertEquals(DebuggerManager.events[0], sut.events[0])
+        assertEquals(DebuggerManager.events[1], sut.events[1])
+        assertEquals(DebuggerManager.events[2], sut.events[2])
+        assertEquals(DebuggerManager.events[3], sut.events[3])
     }
 }

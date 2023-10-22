@@ -1,6 +1,7 @@
 package app.avo.androidanalyticsdebugger.debuggereventslist;
 
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -22,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import app.avo.androidanalyticsdebugger.DebuggerManager;
 import app.avo.androidanalyticsdebugger.model.DebuggerMessage;
@@ -30,10 +32,8 @@ import app.avo.androidanalyticsdebugger.R;
 import app.avo.androidanalyticsdebugger.Util;
 import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 
-enum Sorting {
-    Default,
-}
 
+@SuppressLint("NotifyDataSetChanged")
 class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEventsListAdapter.DebuggerEventViewHolder> {
 
     private final List<DebuggerEventItem> expendedEvents = new ArrayList<>();
@@ -262,7 +262,7 @@ class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEventsListA
         events.clear();
         for (int i = 0; i < DebuggerManager.events.size(); i++) {
             DebuggerEventItem debuggerEventItem = DebuggerManager.events.get(i);
-            if (s.isEmpty() || debuggerEventItem.name.contains(s)) {
+            if (s.isEmpty() || debuggerEventItem.name.toLowerCase(Locale.ROOT).contains(s.toLowerCase(Locale.ROOT))) {
                 events.add(debuggerEventItem);
             }
         }

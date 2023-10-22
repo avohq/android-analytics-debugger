@@ -2,6 +2,7 @@ package app.avo.androidanalyticsdebugger.debuggereventslist
 
 import android.os.Build
 import android.view.View
+import android.widget.EditText
 import app.avo.androidanalyticsdebugger.DebuggerManager
 import app.avo.androidanalyticsdebugger.R
 import app.avo.androidanalyticsdebugger.createBasicEvent
@@ -76,10 +77,25 @@ class DebuggerEventsListActivityTest {
         controller.create(null)
         val activity = controller.get()
 
-        // When
-        activity.adapter.filter("mid")
+        // When filter is set
+        activity.findViewById<View>(R.id.filter_input_toggle).performClick()
+        activity.findViewById<EditText>(R.id.filter_input).setText("mId")
 
-        // Then
+        // Then the content is filtered
+        assertEquals(midnightEvent, activity.adapter.events[0])
+        assertEquals(middayEvent, activity.adapter.events[1])
+        assertEquals(2, activity.adapter.events.size())
+
+        // When filter is hidden
+        activity.findViewById<View>(R.id.filter_input_toggle).performClick()
+
+        // Then all events are visible
+        assertEquals(4, activity.adapter.events.size())
+
+        // When filter is shown back
+        activity.findViewById<View>(R.id.filter_input_toggle).performClick()
+
+        // The events are filtered again
         assertEquals(midnightEvent, activity.adapter.events[0])
         assertEquals(middayEvent, activity.adapter.events[1])
         assertEquals(2, activity.adapter.events.size())

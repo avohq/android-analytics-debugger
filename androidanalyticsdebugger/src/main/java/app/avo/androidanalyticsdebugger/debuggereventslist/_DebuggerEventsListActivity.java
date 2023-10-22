@@ -26,7 +26,7 @@ public class _DebuggerEventsListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_debugger_events_list_activity);
 
         final RecyclerView recycler = findViewById(R.id.events_list);
-        adapter = new DebuggerEventsListAdapter();
+        adapter = new DebuggerEventsListAdapter(Sorting.Default);
         recycler.setAdapter(adapter);
         recycler.setLayoutManager(new LinearLayoutManager(this));
 

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SortedList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,17 +28,69 @@ import app.avo.androidanalyticsdebugger.R;
 import app.avo.androidanalyticsdebugger.Util;
 import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 
+enum Sorting {
+    Default,
+    Alphabetical
+}
+
 class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEventsListAdapter.DebuggerEventViewHolder> {
 
     private List<DebuggerEventItem> expendedEvents = new ArrayList<>();
+    private SortedList<DebuggerEventItem> events;
 
-    DebuggerEventsListAdapter() {
-        if (DebuggerManager.events.size() > 0) {
-            expendedEvents.add(DebuggerManager.events.get(0));
+    DebuggerEventsListAdapter(Sorting sorting) {
+        if (sorting == Sorting.Alphabetical) {
+            events = new SortedList<>(DebuggerEventItem.class, new SortedList.Callback<DebuggerEventItem>() {
+                @Override
+                public int compare(DebuggerEventItem o1, DebuggerEventItem o2) {
+                    int compareNamesAscending = o1.name.compareTo(o2.name);
+                    if (compareNamesAscending == 0) {
+                        int compareTimestampsDescending = o2.timestamp.compareTo(o1.timestamp);
+                        return compareTimestampsDescending;
+                    }
+                    return compareNamesAscending;
+                }
+
+                @Override
+                public void onChanged(int position, int count) {
+                }
+
+                @Override
+                public boolean areContentsTheSame(DebuggerEventItem oldItem, DebuggerEventItem newItem) {
+                    return oldItem.equals(newItem);
+                }
+
+                @Override
+                public boolean areItemsTheSame(DebuggerEventItem item1, DebuggerEventItem item2) {
+                    return item1 == item2;
+                }
+
+                @Override
+                public void onInserted(int position, int count) {
+                }
+
+                @Override
+                public void onRemoved(int position, int count) {
+                }
+
+                @Override
+                public void onMoved(int fromPosition, int toPosition) {
+                }
+            });
+            for (int i = 0; i < DebuggerManager.events.size(); i++) {
+                DebuggerEventItem debuggerEventItem = DebuggerManager.events.get(i);
+                events.add(debuggerEventItem);
+            }
+        } else {
+            events = DebuggerManager.events;
         }
 
-        for (int i = 0; i < DebuggerManager.events.size(); i++) {
-            DebuggerEventItem event = DebuggerManager.events.get(i);
+        if (events.size() > 0) {
+            expendedEvents.add(events.get(0));
+        }
+
+        for (int i = 0; i < events.size(); i++) {
+            DebuggerEventItem event = events.get(i);
             if (Util.eventHaveErrors(event)) {
                 expendedEvents.add(event);
             }
@@ -54,7 +107,7 @@ class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEventsListA
     @Override
     public void onBindViewHolder(@NonNull final DebuggerEventViewHolder holder, int position) {
 
-        final DebuggerEventItem event = DebuggerManager.events.get(position);
+        final DebuggerEventItem event = events.get(position);
         boolean hasError = Util.eventHaveErrors(event);
         final boolean expended = expendedEvents.contains(event);
 
@@ -158,7 +211,7 @@ class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEventsListA
             return;
         }
 
-        for (DebuggerProp prop: props) {
+        for (DebuggerProp prop : props) {
             View propRowView = layoutInflater.inflate(R.layout.event_prop_row,
                     holder.expendedContent, false);
             TextView propName = propRowView.findViewById(R.id.prop_name);
@@ -227,7 +280,7 @@ class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEventsListA
 
     @Override
     public int getItemCount() {
-        return DebuggerManager.events.size();
+        return events.size();
     }
 
     void onNewItem(DebuggerEventItem event) {
@@ -237,6 +290,10 @@ class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEventsListA
 
     public List<DebuggerEventItem> getExpendedEvents() {
         return expendedEvents;
+    }
+
+    public SortedList<DebuggerEventItem> getEvents() {
+        return events;
     }
 
     static class DebuggerEventViewHolder extends RecyclerView.ViewHolder {

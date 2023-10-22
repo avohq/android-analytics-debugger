@@ -51,12 +51,12 @@ fun barDebuggerLayoutInflater(mockContainer: View, mockSuccessIcon: ImageView,
     return mockLayoutInflater
 }
 
-fun createBasicEvent(timestamp: Long = 1): DebuggerEventItem {
-    return DebuggerEventItem("id", timestamp, "name",
+fun createBasicEvent(timestamp: Long = 1, name: String = "name"): DebuggerEventItem {
+    return DebuggerEventItem("id", timestamp, name,
             null, null, null)
 }
 
-fun createErrorEvent(timestamp: Long = 1): DebuggerEventItem {
-    return DebuggerEventItem("id", timestamp, "name",
+fun createErrorEvent(timestamp: Long = 1, name: String = "name"): DebuggerEventItem {
+    return DebuggerEventItem("id", timestamp, name,
             listOf(mapOf(Pair("tag", "tag"), Pair("propertyId", "prop"), Pair("message", "mes"))), null, null)
 }

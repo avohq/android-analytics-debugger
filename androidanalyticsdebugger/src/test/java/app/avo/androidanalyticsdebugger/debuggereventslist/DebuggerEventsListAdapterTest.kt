@@ -1,15 +1,18 @@
 package app.avo.androidanalyticsdebugger.debuggereventslist
 
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.FrameLayout
 import app.avo.androidanalyticsdebugger.DebuggerManager
 import app.avo.androidanalyticsdebugger.Util
 import app.avo.androidanalyticsdebugger.createBasicEvent
 import app.avo.androidanalyticsdebugger.createErrorEvent
+import app.avo.androidanalyticsdebugger.model.DebuggerEventItem
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import org.junit.Test
 import org.junit.Assert.*
+import org.junit.Test
 
 class DebuggerEventsListAdapterTest {
 

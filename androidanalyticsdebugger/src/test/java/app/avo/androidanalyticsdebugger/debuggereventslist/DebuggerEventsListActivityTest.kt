@@ -60,4 +60,19 @@ class DebuggerEventsListActivityTest {
         // Then
         assertNull(DebuggerManager.eventUpdateListener)
     }
+
+    @Test
+    fun clearsTheEvents() {
+        // Given
+        val controller = buildActivity(_DebuggerEventsListActivity::class.java)
+        controller.create(null)
+        controller.get().adapter = mock()
+
+        // When
+        controller.get().findViewById<View>(R.id.clear_events_button).performClick()
+
+        // Then
+        assertEquals(0, DebuggerManager.events.size())
+        verify(controller.get().adapter).notifyDataSetChanged()
+    }
 }

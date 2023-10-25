@@ -1,6 +1,7 @@
 package app.avo.androidanalyticsdebugger.debuggereventslist;
 
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -230,6 +231,7 @@ class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEventsListA
         return DebuggerManager.events.size();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     void onNewItem(DebuggerEventItem event) {
         expendedEvents.add(event);
         notifyDataSetChanged();

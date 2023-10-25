@@ -5,6 +5,6 @@
     <string name="zero_num_label">0</string>
 
     <string name="close_button_description">close the screen</string>
-    <string name="filter_input_description">filter events</string>
+    <string name="filter_input_description">filter by event name</string>
     <string name="toggle_content_expansion_button_description">toggle content expansion button</string>
 </resources>

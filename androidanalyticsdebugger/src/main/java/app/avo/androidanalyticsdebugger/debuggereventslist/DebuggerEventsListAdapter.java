@@ -245,7 +245,7 @@ class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEventsListA
     }
 
     void onNewItem(DebuggerEventItem event) {
-        events.add(event); // TODO manual refresh instead
+        events.add(event);
         expendedEvents.add(event);
         notifyDataSetChanged();
     }

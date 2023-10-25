@@ -8,8 +8,9 @@ import app.avo.androidanalyticsdebugger.createErrorEvent
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
-import org.junit.Assert.*
 
 class DebuggerEventsListAdapterTest {
 

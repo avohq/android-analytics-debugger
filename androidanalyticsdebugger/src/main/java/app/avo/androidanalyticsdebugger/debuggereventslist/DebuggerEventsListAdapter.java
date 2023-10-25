@@ -19,6 +19,8 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import app.avo.androidanalyticsdebugger.DebuggerManager;
@@ -152,12 +154,23 @@ class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEventsListA
         }
     }
 
+    private void sortPropsByName(List<DebuggerProp> eventProps) {
+        Collections.sort(eventProps, new Comparator<DebuggerProp>() {
+            @Override
+            public int compare(DebuggerProp debuggerProp0, DebuggerProp debuggerProp1) {
+                return debuggerProp0.name.compareTo(debuggerProp1.name);
+            }
+        });
+    }
+
     private void addPropRows(@NonNull DebuggerEventViewHolder holder, DebuggerEventItem event,
                              Context context, LayoutInflater layoutInflater,
                              @Nullable List<DebuggerProp> props) {
         if (props == null) {
             return;
         }
+
+        sortPropsByName(props);
 
         for (DebuggerProp prop: props) {
             View propRowView = layoutInflater.inflate(R.layout.event_prop_row,

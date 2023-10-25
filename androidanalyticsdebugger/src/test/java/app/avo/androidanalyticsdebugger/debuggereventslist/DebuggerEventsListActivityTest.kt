@@ -97,4 +97,19 @@ class DebuggerEventsListActivityTest {
         assertEquals("A User prop", (viewHolder.expendedContent.getChildAt(4).findViewById(R.id.prop_name) as TextView).text)
         assertEquals("B User prop", (viewHolder.expendedContent.getChildAt(6).findViewById(R.id.prop_name) as TextView).text)
     }
+
+    @Test
+    fun clearsTheEvents() {
+        // Given
+        val controller = buildActivity(_DebuggerEventsListActivity::class.java)
+        controller.create(null)
+        controller.get().adapter = mock()
+
+        // When
+        controller.get().findViewById<View>(R.id.clear_events_button).performClick()
+
+        // Then
+        assertEquals(0, DebuggerManager.events.size())
+        verify(controller.get().adapter).notifyDataSetChanged()
+    }
 }

@@ -36,6 +36,8 @@ public class SandboxActivity extends AppCompatActivity {
                 debuggerManager.publishEvent(System.currentTimeMillis(), "Start event",
                         new ArrayList<EventProperty>(){{
                             add(new EventProperty("Prop Name", "Prop Value"));
+                            add(new EventProperty("A Prop Name", "A Prop Value"));
+                            add(new EventProperty("0 Prop Name", "0 Prop Value"));
                         }}, null);
             }
         }).start();
@@ -135,12 +137,12 @@ public class SandboxActivity extends AppCompatActivity {
                             event.userProps = new ArrayList<>();
                             event.userProps.add(new DebuggerProp());
                             event.userProps.get(0).id = "";
-                            event.userProps.get(0).name = "Author Id";
-                            event.userProps.get(0).value = "Qew423ffdm";
+                            event.userProps.get(0).name = "Author Name";
+                            event.userProps.get(0).value = "Dinesh";
                             event.userProps.add(new DebuggerProp());
                             event.userProps.get(1).id = "";
-                            event.userProps.get(1).name = "Author Name";
-                            event.userProps.get(1).value = "Dinesh";
+                            event.userProps.get(1).name = "Author Id";
+                            event.userProps.get(1).value = "Qew423ffdm";
 
                             event.eventProps = new ArrayList<>();
 

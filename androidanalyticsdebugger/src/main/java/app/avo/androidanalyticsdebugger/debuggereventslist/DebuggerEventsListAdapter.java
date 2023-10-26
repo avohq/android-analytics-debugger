@@ -22,6 +22,8 @@ import androidx.recyclerview.widget.SortedList;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -165,6 +167,15 @@ class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEventsListA
         }
     }
 
+    private void sortPropsByName(List<DebuggerProp> eventProps) {
+        Collections.sort(eventProps, new Comparator<DebuggerProp>() {
+            @Override
+            public int compare(DebuggerProp debuggerProp0, DebuggerProp debuggerProp1) {
+                return debuggerProp0.name.compareTo(debuggerProp1.name);
+            }
+        });
+    }
+
     private void addPropRows(@NonNull DebuggerEventViewHolder holder, DebuggerEventItem event,
                              Context context, LayoutInflater layoutInflater,
                              @Nullable List<DebuggerProp> props) {
@@ -172,7 +183,9 @@ class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEventsListA
             return;
         }
 
-        for (DebuggerProp prop : props) {
+        sortPropsByName(props);
+
+        for (DebuggerProp prop: props) {
             View propRowView = layoutInflater.inflate(R.layout.event_prop_row,
                     holder.expendedContent, false);
             TextView propName = propRowView.findViewById(R.id.prop_name);
@@ -256,6 +269,11 @@ class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEventsListA
 
     public SortedList<DebuggerEventItem> getEvents() {
         return events;
+    }
+
+    public void clearEvents() {
+        events.clear();
+        notifyDataSetChanged();
     }
 
     void filter(@NotNull String s) {

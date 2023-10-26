@@ -69,6 +69,19 @@
         tools:src="@drawable/collapse_arrow"
         android:gravity="center"/>
 
+    <TextView
+        android:id="@+id/clear_events_button"
+        android:text="Clear"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:layout_height="0dp"
+        android:layout_above="@id/top_divider"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="16dp"
+        android:layout_toStartOf="@+id/close_button"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/events_list"
         android:layout_width="match_parent"

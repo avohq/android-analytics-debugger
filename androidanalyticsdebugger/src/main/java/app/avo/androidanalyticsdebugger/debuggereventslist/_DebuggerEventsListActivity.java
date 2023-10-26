@@ -1,5 +1,6 @@
 package app.avo.androidanalyticsdebugger.debuggereventslist;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,6 +19,7 @@ import app.avo.androidanalyticsdebugger.DebuggerManager;
 import app.avo.androidanalyticsdebugger.R;
 import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 
+@SuppressLint("NotifyDataSetChanged")
 public class _DebuggerEventsListActivity extends AppCompatActivity {
 
     public DebuggerEventsListAdapter adapter;
@@ -35,6 +37,15 @@ public class _DebuggerEventsListActivity extends AppCompatActivity {
         adapter = new DebuggerEventsListAdapter();
         recycler.setAdapter(adapter);
         recycler.setLayoutManager(new LinearLayoutManager(this));
+
+        View clearButton = findViewById(R.id.clear_events_button);
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DebuggerManager.events.clear();
+                adapter.clearEvents();
+            }
+        });
 
         View closeButton = findViewById(R.id.close_button);
         closeButton.setOnClickListener(new View.OnClickListener() {

@@ -17,11 +17,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SortedList;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import app.avo.androidanalyticsdebugger.DebuggerManager;
 import app.avo.androidanalyticsdebugger.model.DebuggerMessage;
@@ -30,17 +34,26 @@ import app.avo.androidanalyticsdebugger.R;
 import app.avo.androidanalyticsdebugger.Util;
 import app.avo.androidanalyticsdebugger.model.DebuggerEventItem;
 
+
+@SuppressLint("NotifyDataSetChanged")
 class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEventsListAdapter.DebuggerEventViewHolder> {
 
-    private List<DebuggerEventItem> expendedEvents = new ArrayList<>();
+    private final List<DebuggerEventItem> expendedEvents = new ArrayList<>();
+    private SortedList<DebuggerEventItem> events;
 
     DebuggerEventsListAdapter() {
-        if (DebuggerManager.events.size() > 0) {
-            expendedEvents.add(DebuggerManager.events.get(0));
+        events = new SortedList<>(DebuggerEventItem.class, new DebuggerManager.EventsSorting());
+        for (int i = 0; i < DebuggerManager.events.size(); i++) {
+            DebuggerEventItem debuggerEventItem = DebuggerManager.events.get(i);
+            events.add(debuggerEventItem);
         }
 
-        for (int i = 0; i < DebuggerManager.events.size(); i++) {
-            DebuggerEventItem event = DebuggerManager.events.get(i);
+        if (events.size() > 0) {
+            expendedEvents.add(events.get(0));
+        }
+
+        for (int i = 0; i < events.size(); i++) {
+            DebuggerEventItem event = events.get(i);
             if (Util.eventHaveErrors(event)) {
                 expendedEvents.add(event);
             }
@@ -57,7 +70,7 @@ class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEventsListA
     @Override
     public void onBindViewHolder(@NonNull final DebuggerEventViewHolder holder, int position) {
 
-        final DebuggerEventItem event = DebuggerManager.events.get(position);
+        final DebuggerEventItem event = events.get(position);
         boolean hasError = Util.eventHaveErrors(event);
         final boolean expended = expendedEvents.contains(event);
 
@@ -241,17 +254,37 @@ class DebuggerEventsListAdapter extends RecyclerView.Adapter<DebuggerEventsListA
 
     @Override
     public int getItemCount() {
-        return DebuggerManager.events.size();
+        return events.size();
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     void onNewItem(DebuggerEventItem event) {
+        events.add(event);
         expendedEvents.add(event);
         notifyDataSetChanged();
     }
 
     public List<DebuggerEventItem> getExpendedEvents() {
         return expendedEvents;
+    }
+
+    public SortedList<DebuggerEventItem> getEvents() {
+        return events;
+    }
+
+    public void clearEvents() {
+        events.clear();
+        notifyDataSetChanged();
+    }
+
+    void filter(@NotNull String s) {
+        events.clear();
+        for (int i = 0; i < DebuggerManager.events.size(); i++) {
+            DebuggerEventItem debuggerEventItem = DebuggerManager.events.get(i);
+            if (s.isEmpty() || debuggerEventItem.name.toLowerCase(Locale.ROOT).contains(s.toLowerCase(Locale.ROOT))) {
+                events.add(debuggerEventItem);
+            }
+        }
+        notifyDataSetChanged();
     }
 
     static class DebuggerEventViewHolder extends RecyclerView.ViewHolder {

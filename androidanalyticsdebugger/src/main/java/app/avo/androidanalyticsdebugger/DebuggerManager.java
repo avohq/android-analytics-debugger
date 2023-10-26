@@ -360,10 +360,15 @@ public class DebuggerManager {
         }
     }
 
-    private static class EventsSorting extends SortedList.Callback<DebuggerEventItem> {
+    public static class EventsSorting extends SortedList.Callback<DebuggerEventItem> {
         @Override
         public int compare(DebuggerEventItem o1, DebuggerEventItem o2) {
-            return o2.timestamp.compareTo(o1.timestamp);
+            int compareTimeDescending = o2.timestamp.compareTo(o1.timestamp);
+            if (compareTimeDescending == 0) {
+                int compareNamesAscending = o1.name.compareTo(o2.name);
+                return compareNamesAscending;
+            }
+            return compareTimeDescending;
         }
 
         @Override

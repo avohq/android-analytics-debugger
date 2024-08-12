@@ -1,14 +1,16 @@
 package app.avo.musicplayerexample
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import app.avo.androidanalyticsdebugger.DebuggerManager
 import app.avo.androidanalyticsdebugger.DebuggerMode
 import app.avo.androidanalyticsdebugger.EventProperty
 import app.avo.androidanalyticsdebugger.PropertyError
-import kotlinx.android.synthetic.main.activity_music_player.*
 import sh.avo.Avo
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -32,13 +34,13 @@ class ExampleMusicPlayerActivity : AppCompatActivity() {
 
         initShowDebuggerButtons()
 
-        play_pause.setOnClickListener {
+        findViewById<View>(R.id.play_pause).setOnClickListener {
             onPlayPauseClick()
         }
-        next_track.setOnClickListener {
+        findViewById<View>(R.id.next_track).setOnClickListener {
             onNextTrackClick()
         }
-        prev_track.setOnClickListener {
+        findViewById<View>(R.id.prev_track).setOnClickListener {
             onPrevTrackClick()
         }
 
@@ -49,13 +51,13 @@ class ExampleMusicPlayerActivity : AppCompatActivity() {
     }
 
     private fun initShowDebuggerButtons() {
-        show_bubble_debugger.setOnClickListener {
+        findViewById<View>(R.id.show_bubble_debugger).setOnClickListener {
             debuggerManager.showDebugger(this, DebuggerMode.bubble)
         }
-        show_bar_debugger.setOnClickListener {
+        findViewById<View>(R.id.show_bar_debugger).setOnClickListener {
             debuggerManager.showDebugger(this, DebuggerMode.bar)
         }
-        hide_debugger.setOnClickListener {
+        findViewById<View>(R.id.hide_debugger).setOnClickListener {
             debuggerManager.hideDebugger(this)
         }
     }
@@ -63,7 +65,7 @@ class ExampleMusicPlayerActivity : AppCompatActivity() {
     private fun initialState() {
         logic.loadCurrentTrack(applicationContext)
         showCurrentTrack()
-        prev_track.visibility = View.INVISIBLE
+        findViewById<View>(R.id.prev_track).visibility = View.INVISIBLE
     }
 
     private fun onPrevTrackClick() {
@@ -100,14 +102,15 @@ class ExampleMusicPlayerActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("DiscouragedApi")
     private fun play() {
         logic.player.play()
-        play_pause.text = getString(R.string.pause_label)
+        findViewById<Button>(R.id.play_pause).text = getString(R.string.pause_label)
 
         timer = Timer()
         timer?.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
-                time_field.post {
+                findViewById<View>(R.id.time_field).post {
                     showTrackTime()
                 }
             }
@@ -116,35 +119,35 @@ class ExampleMusicPlayerActivity : AppCompatActivity() {
 
     private fun pause() {
         logic.player.pause()
-        play_pause.text = getString(R.string.play_label)
+        findViewById<Button>(R.id.play_pause).text = getString(R.string.play_label)
 
         timer?.cancel()
     }
 
     private fun showTrackTime() {
-        time_field.text = getString(R.string.track_time,
+        findViewById<TextView>(R.id.time_field).text = getString(R.string.track_time,
                 TimeUnit.SECONDS.convert(logic.player.currentPosition().toLong(), TimeUnit.MILLISECONDS),
                 TimeUnit.SECONDS.convert(logic.player.trackLength().toLong(), TimeUnit.MILLISECONDS))
     }
 
     private fun manageNavigationButtonsVisibilityOnNext() {
-        prev_track.visibility = View.VISIBLE
+        findViewById<View>(R.id.prev_track).visibility = View.VISIBLE
         if (!logic.hasNext()) {
-            next_track.visibility = View.INVISIBLE
+            findViewById<View>(R.id.next_track).visibility = View.INVISIBLE
         }
     }
 
     private fun manageNavigationButtonsVisibilityOnPrev() {
-        next_track.visibility = View.VISIBLE
+        findViewById<View>(R.id.next_track).visibility = View.VISIBLE
         if (!logic.hasPrev()) {
-            prev_track.visibility = View.INVISIBLE
+            findViewById<View>(R.id.prev_track).visibility = View.INVISIBLE
         }
     }
 
     private fun showCurrentTrack() {
-        play_pause.text = getString(R.string.play_label)
+        findViewById<Button>(R.id.play_pause).text = getString(R.string.play_label)
 
-        track_name.text = logic.currentTrackName()
+        findViewById<TextView>(R.id.track_name).text = logic.currentTrackName()
 
         showTrackTime()
     }

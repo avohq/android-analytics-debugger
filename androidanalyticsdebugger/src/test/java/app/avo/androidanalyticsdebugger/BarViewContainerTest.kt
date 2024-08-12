@@ -33,6 +33,7 @@ class BarViewContainerTest {
         barViewContainer = spy(BarViewContainer(mockLayoutInflater))
     }
 
+    @Suppress("DEPRECATION")
     @Test
     fun errorResetsOnClick() {
         // Given
@@ -76,6 +77,7 @@ class BarViewContainerTest {
         verify(mockEventName, never()).setTextColor(ArgumentMatchers.anyInt())
     }
 
+    @Suppress("DEPRECATION")
     @Test
     fun showsErrorEvent() {
         // Given

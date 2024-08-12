@@ -1,4 +1,4 @@
-package app.avo.analyticsdebuggerexample;
+package app.avo.sandboxexample;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;

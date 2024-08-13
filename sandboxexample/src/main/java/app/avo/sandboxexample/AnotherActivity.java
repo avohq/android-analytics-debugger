@@ -1,4 +1,4 @@
-package app.avo.analyticsdebuggerexample;
+package app.avo.sandboxexample;
 
 import android.os.Bundle;
 

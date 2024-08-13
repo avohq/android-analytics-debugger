@@ -4,7 +4,6 @@ import android.app.Application
 
 import app.avo.androidanalyticsdebugger.DebuggerManager
 import sh.avo.*
-import timber.log.Timber
 
 class MusicPlayerExampleApplication : Application() {
 

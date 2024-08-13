@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.os.Handler
+import android.os.Looper
 import app.avo.androidanalyticsdebugger.debuggerview.DebuggerViewContainer
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.spy
@@ -68,9 +69,9 @@ class DebuggerManagerTest {
         debuggerManager.publishEvent(event)
 
         // Then
-        Handler().post({
+        Handler(Looper.getMainLooper()).post {
             assert(event == DebuggerManager.events[0])
-        })
+        }
     }
 
     @Test
@@ -85,10 +86,10 @@ class DebuggerManagerTest {
         debuggerManager.publishEvent(firstEvent)
 
         // Then
-        Handler().post({
+        Handler(Looper.getMainLooper()).post {
             assertEquals(secondEvent, DebuggerManager.events[0])
             assertEquals(firstEvent, DebuggerManager.events[1])
-        })
+        }
     }
 
     @Test
@@ -103,9 +104,9 @@ class DebuggerManagerTest {
         debuggerManager.publishEvent(event)
 
         // Then
-        Handler().post({
+        Handler(Looper.getMainLooper()).post {
             verify(mockDebugger).showEvent(event)
-        })
+        }
     }
 
     @Test
@@ -119,9 +120,9 @@ class DebuggerManagerTest {
         debuggerManager.publishEvent(event)
 
         // Then
-        Handler().post({
+        Handler(Looper.getMainLooper()).post {
             verify(DebuggerManager.eventUpdateListener).onNewEvent(event)
-        })
+        }
     }
 
     @Test
@@ -179,9 +180,9 @@ class DebuggerManagerTest {
         debuggerManager.showDebugger(mockActivity, DebuggerMode.bubble)
 
         // Then
-        Handler().post({
+        Handler(Looper.getMainLooper()).post {
             verify(counter).text = "10"
-        })
+        }
     }
 
     @Test
@@ -211,10 +212,10 @@ class DebuggerManagerTest {
         debuggerManager.showDebugger(mockActivity, DebuggerMode.bar)
 
         // Then
-        Handler().post({
+        Handler(Looper.getMainLooper()).post {
             verify(timestamp).text = Util.timeString(lastEvent.timestamp)
             verify(eventName).text = lastEvent.name
-        })
+        }
     }
 
     @Test

@@ -14,6 +14,7 @@ import org.junit.Test
 import org.mockito.ArgumentMatchers.anyInt
 import org.junit.Assert.*
 
+@Suppress("DEPRECATION")
 class BubbleViewContainerTest {
 
     private lateinit var bubbleViewContainer: BubbleViewContainer

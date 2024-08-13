@@ -1,7 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-
-group='com.github.avohq'
+apply plugin: 'maven-publish'
 
 android {
     compileSdk 34
@@ -14,16 +13,18 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
+
+        buildConfigField("String","VERSION_NAME","\"${defaultConfig.versionName}\"")
+
+        aarMetadata {
+            minCompileSdk = 21
+        }
     }
 
     buildTypes {
-        debug {
-            buildConfigField("String","VERSION_NAME","\"${defaultConfig.versionName}\"")
-        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField("String","VERSION_NAME","\"${defaultConfig.versionName}\"")
         }
     }
 
@@ -57,3 +58,14 @@ repositories {
     mavenCentral()
 }
 
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                groupId = 'com.github.avohq'
+            }
+        }
+    }
+}
